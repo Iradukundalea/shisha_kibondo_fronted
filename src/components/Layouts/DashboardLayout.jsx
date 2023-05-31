@@ -17,7 +17,7 @@ import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 
 import { mainListItems, secondaryListItems, thirdListItems } from '../dashboard/listItems';
 // import Chart from './Chart';
@@ -83,8 +83,11 @@ export default function DashboardLayout() {
 
   const { user } = useSelector((state)=> state.authState)
 
+  const location = useLocation();
+  const pathnames = location.pathname.split('/').filter((x) => x);
 
   return (
+
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
@@ -113,6 +116,7 @@ export default function DashboardLayout() {
               noWrap
               sx={{ flexGrow: 1 }}
             >
+              {/* {pathnames.length ? `${pathnames.slice(0, pathnames.length).join(' /')}` : 'Dashboard'} */}
               Dashboard
             </Typography>
             <Typography>

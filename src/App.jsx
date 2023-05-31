@@ -8,7 +8,7 @@ import SignIn from './components/sign-in'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Orders from './components/dashboard/Orders' 
 import DashboardLayout from './components/Layouts/DashboardLayout'
-import Deposits from './components/dashboard/Deposits'
+import UserDetails from './components/dashboard/UserDetails'
 import Chart from './components/dashboard/Chart'
 import NotFound from './components/NotFound'
 import Dashboard from './components/dashboard/Dashboard'
@@ -43,7 +43,7 @@ function App() {
               }>
               <Route exact index element={<Dashboard />} />
               <Route path="orders" element={<Orders />} />
-              <Route path="deposits" element={<Deposits />} />
+              <Route path="users/:userId" element={<UserDetails />} />
               <Route path="customers" element={<Chart />} />
               <Route element={ <AdminRoute />}>
                 <Route path="advisors" element={<Advisor />} />

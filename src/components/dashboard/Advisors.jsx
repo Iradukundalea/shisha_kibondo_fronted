@@ -25,7 +25,6 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { mainListItems, secondaryListItems, thirdListItems } from './listItems';
 import Chart from './Chart';
-import Deposits from './Deposits';
 import Orders from './Orders';
 import Copyright from '../copyright';
 import { useSelector, useDispatch } from 'react-redux'
@@ -34,53 +33,12 @@ import { getAdvisors } from '../../redux/actions/AdvisorActions'
 import Loading from './Loading'
 import AddAdvisor from './AddAdvisor'
 
-// Generate Order Data
-function createData(id, date, name, shipTo, paymentMethod, amount) {
-  return { id, date, name, shipTo, paymentMethod, amount };
-}
-
-const rows = [
-  createData(
-    0,
-    '16 Mar, 2019',
-    'Elvis Presley',
-    'Tupelo, MS',
-    'VISA ⠀•••• 3719',
-    312.44,
-  ),
-  createData(
-    1,
-    '16 Mar, 2019',
-    'Paul McCartney',
-    'London, UK',
-    'VISA ⠀•••• 2574',
-    866.99,
-  ),
-  createData(2, '16 Mar, 2019', 'Tom Scholz', 'Boston, MA', 'MC ⠀•••• 1253', 100.81),
-  createData(
-    3,
-    '16 Mar, 2019',
-    'Michael Jackson',
-    'Gary, IN',
-    'AMEX ⠀•••• 2000',
-    654.39,
-  ),
-  createData(
-    4,
-    '15 Mar, 2019',
-    'Bruce Springsteen',
-    'Long Branch, NJ',
-    'VISA ⠀•••• 5919',
-    212.79,
-  ),
-];
 
 function preventDefault(event) {
   event.preventDefault();
 }
 
 export default function Advisor() {
-  const state = useSelector((state)=> state.authState)
   const { advisors, loading } = useSelector((state)=> state.advisorState)
 
   const dispatch = useDispatch()
@@ -89,7 +47,6 @@ export default function Advisor() {
     dispatch(getAdvisors())
   },[])
 
-  console.log('CCCCCCCCCCCCCcc', loading)
   return (
     <>
     <Grid container spacing={3}>
@@ -103,23 +60,21 @@ export default function Advisor() {
           // height: 240,
         }}
       >
-        {/* <Typography>State: {state?.user?.loginToken}</Typography> */}
         { loading ? 
-      //  <Typography>Loading...</Typography> :
         <Loading /> : 
        <>
         {/* <Title>Recent Orders</Title> */}
         <Table size="small" padding="checkbox">
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
+              <TableCell sx={{ fontWeight: 'bold'}}>Name</TableCell>
               {/* <TableCell>LastName</TableCell> */}
-              <TableCell>Email</TableCell>
-              <TableCell>Sex</TableCell>
-              <TableCell>Phone</TableCell>
+              <TableCell sx={{ fontWeight: 'bold'}}>Email</TableCell>
+              <TableCell sx={{ fontWeight: 'bold'}}>Sex</TableCell>
+              <TableCell sx={{ fontWeight: 'bold'}}>Phone</TableCell>
               {/* <TableCell>Degree</TableCell> */}
               {/* <TableCell>Specilialized</TableCell> */}
-              <TableCell><b>JoinedAt</b></TableCell>
+              <TableCell sx={{ fontWeight: 'bold'}}>JoinedAt</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -153,7 +108,6 @@ export default function Advisor() {
           // height: 240,
         }}
       >
-        {/* <AddAdvisor addNewAdvisor={handleAddAdvisor} /> */}
         <AddAdvisor />
       </Paper>
     </Grid>

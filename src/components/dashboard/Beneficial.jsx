@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Link from '@mui/material/Link';
+// import Link from '@mui/material/Link';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -27,7 +27,6 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { mainListItems, secondaryListItems, thirdListItems } from './listItems';
 import Chart from './Chart';
-import Deposits from './Deposits';
 import CheckCategory from './CheckCategory';
 import Steppers from './Steppers';
 import Orders from './Orders';
@@ -37,6 +36,7 @@ import { getBeneficials } from '../../redux/actions/BeneficialsActions';
 import { useEffect, useState } from 'react';
 import Loading from './Loading'
 import {getCurrentUser} from '../../utils/getCurrentUser'
+import { Link } from 'react-router-dom'
 
 function preventDefault(event) {
   event.preventDefault();
@@ -45,7 +45,6 @@ function preventDefault(event) {
 export default function Beneficial() {
   const [showAddForm, setShowAddForm] = useState(false)
   const { beneficials, loading: loadBeneficials, message: beneficalMessage } = useSelector((state)=> state.beneficialState)
-  const { loading: checkingUbudehe, message, results } = useSelector((state)=> state.ubudeheState)
   const dispatch = useDispatch()
   const [currentUser, setCurrentUser] = useState('')
 
@@ -54,11 +53,8 @@ export default function Beneficial() {
     setCurrentUser(getCurrentUser())
   },[])
 
-  console.log('UBUDEHE', currentUser.role)
-
   return (
     <>
-
     { showAddForm ? (
       <Button
       type="submit"
@@ -124,8 +120,15 @@ export default function Beneficial() {
                 </TableHead>
                 <TableBody>
                   {beneficials?.map((row, index) => (
-                    <TableRow key={index} hover={true}>
-                      <TableCell>{row?.firstName} {row?.lastName}</TableCell>
+                    <TableRow key={index} >
+                      <TableCell>
+                        <Link
+                          style={{ textDecoration: 'underline'}}
+                          to={`/dashboard/users/${row?.id}`}
+                        >
+                          {row?.firstName} {row?.lastName}
+                        </Link>
+                      </TableCell>
                       <TableCell>{row?.identityNumber}</TableCell>
                       <TableCell>{row?.email || '-'}</TableCell>
                       <TableCell>{row?.sex}</TableCell>

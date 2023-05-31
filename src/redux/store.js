@@ -5,6 +5,7 @@ import advisorReducer from "./reducers/AdvisorReducer"
 import nurseReducer from "./reducers/NurseReducer";
 import beneficialReducer from "./reducers/BeneficialReducer"
 import ubudeheReducer from "./reducers/UbudeheReducer";
+import userReducer from './reducers/UserReducer'
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   nurseState: nurseReducer,
   beneficialState: beneficialReducer,
   ubudeheState: ubudeheReducer,
+  userState: userReducer,
 
 });
 

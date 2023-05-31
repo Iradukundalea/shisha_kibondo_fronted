@@ -25,7 +25,6 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { mainListItems, secondaryListItems, thirdListItems } from './listItems';
 import Chart from './Chart';
-import Deposits from './Deposits';
 import Orders from './Orders';
 import Copyright from '../copyright';
 import { useSelector, useDispatch } from 'react-redux'
@@ -72,14 +71,14 @@ export default function Nurses() {
         <Table size="small" padding="checkbox">
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
+              <TableCell sx={{ fontWeight: 'bold'}}>Name</TableCell>
               {/* <TableCell>LastName</TableCell> */}
-              <TableCell>Email</TableCell>
-              <TableCell>Sex</TableCell>
-              <TableCell>Phone</TableCell>
+              <TableCell sx={{ fontWeight: 'bold'}}>Email</TableCell>
+              <TableCell sx={{ fontWeight: 'bold'}}>Sex</TableCell>
+              <TableCell sx={{ fontWeight: 'bold'}}>Phone</TableCell>
               {/* <TableCell>Degree</TableCell> */}
               {/* <TableCell>Specilialized</TableCell> */}
-              <TableCell><b>JoinedAt</b></TableCell>
+              <TableCell sx={{ fontWeight: 'bold'}}>JoinedAt</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
