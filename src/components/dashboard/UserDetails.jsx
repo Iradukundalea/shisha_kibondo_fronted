@@ -10,9 +10,19 @@ import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
+import TextField from '@mui/material/TextField';
+import Input from '@mui/material/Input';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+
 
 import { useParams } from 'react-router-dom'
 import { getUserDetails } from '../../redux/actions/UserActions';
+import { getBeneficialTakingUpTransactions } from '../../redux/actions/TakingUpActions'
+import { listProductsAction } from '../../redux/actions/ProductActions';
+import { donateToBeneficial } from '../../redux/actions/TakingUpActions'; 
 import { useDispatch, useSelector } from 'react-redux';
 import {getCurrentUser} from '../../utils/getCurrentUser'
 
@@ -22,16 +32,40 @@ function preventDefault(event) {
 
 export default function UserDetails() {
   const [currentUser, setCurrentUser] = React.useState('')
+  const [showDonateForm, setShowDonateForm] = React.useState(false)
+  const [productCatId, setProductCatId] = React.useState('')
+  const [quantity, setQuantity] = React.useState('')
+  
   const dispatch = useDispatch()
 
   const { details } = useSelector((state)=> state.userState)
+  const { transactions, loading: loadingTakeup, message: takeUpMessage } = useSelector((state)=> state.takeUpState)
+  const { list: productsList } = useSelector((state)=> state.productState)
 
-  const { userId} = useParams();
+  const { userId } = useParams();
 
   React.useEffect(()=>{
     dispatch(getUserDetails(userId))
+    dispatch(getBeneficialTakingUpTransactions(userId))
+    dispatch(listProductsAction())
+
     setCurrentUser(getCurrentUser())
   }, [userId])
+
+  const handleProductChange = (event) =>{
+    setProductCatId(event.target.value)
+  }
+  const handleQuantityChange = (event) =>{
+    setQuantity(event.target.value)
+  }
+  const handleShowDonateForm = () =>{
+    setShowDonateForm(false)
+  }
+  const handleDonateSubmit = (event) =>{
+    preventDefault(event)
+
+    dispatch(donateToBeneficial(productCatId, userId, quantity, setShowDonateForm))
+  }
 
   return (
     <React.Fragment>
@@ -102,7 +136,7 @@ export default function UserDetails() {
     </Grid>
 
     
-    {/* Recent Deposits */}
+    {/* Guardians */}
     <Grid item xs={12} md={4} lg={5}>
       <Paper
         sx={{
@@ -161,7 +195,6 @@ export default function UserDetails() {
             </Box>
           )}
           
-          
         </Paper>
       ): '' }
      
@@ -178,9 +211,132 @@ export default function UserDetails() {
       >
         Taking up Records
       </Paper>
+
+      { !showDonateForm && details?.guardians ? (
+        <Paper
+        sx={{
+          mt: 2,
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+        >
+          <List>
+          {transactions?.map((record, index) => (
+            <ListItem key={record?.id}>
+              <ListItemText
+                primary={`${record?.category.name}`}
+                secondary={
+                  <>
+                    <div>{new Date(record?.createdAt).toLocaleDateString()}</div>
+                  </>
+                }
+              />
+              <Typography> +{record?.quantity} Pks</Typography>
+            </ListItem>
+          ))}
+          </List>
+
+          {/* Donate shishakibondo */}
+          { currentUser.role === 'Nurse' && (
+            <Box 
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-end',
+                p: 2
+              }}
+            >
+              <Button
+                  // type="submit"
+                  size="small"
+                  variant="outlined"
+                  // sx={{ mt: 2, mb: 2, mr:4 }}
+                  onClick={()=> setShowDonateForm(true)}
+                >
+                  + Donate Now
+              </Button>
+            </Box>
+          )}
+        </Paper>
+      ): '' }
+
+      {/* Form For Donating Product */}
+      { showDonateForm && (
+        <Box>
+          <Paper
+            sx={{
+              mt: 2,
+              p: 2,
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+        <Box>
+          <FormControl fullWidth>
+            <InputLabel id="product-select">Product</InputLabel>
+            <Select
+              labelId="product-select"
+              id="product-select"
+              name="product"
+              value={ productCatId }
+              label="Product"
+              onChange={handleProductChange}
+            >
+              { productsList?.map((product) =>(
+                <MenuItem key={product.id} value={product.id}>{product.name}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
+        <Input
+            required
+            fullWidth
+            type= "number"
+            id="quantity"
+            label="Quantity"
+            name="quantity"
+            placeholder= "Quantity"
+            sx={{
+              border: 1,
+              padding: 1,
+              borderRadius: 2,
+              mt: 2
+            }}
+            value={quantity}
+            onChange={handleQuantityChange}
+        />
+
+        {loadingTakeup ? (
+          <Button
+              size="medium"
+              variant="contained"
+              sx={{ mt: 2, mb: 2 }}
+            >
+              Submitting...
+        </Button>
+        ): (
+        <Button
+              // type="submit"
+              size="medium"
+              variant="contained"
+              sx={{ mt: 2, mb: 2 }}
+              onClick={handleDonateSubmit}
+              disabled={!quantity || !productCatId || parseInt(quantity) === 0  } 
+            >
+              Submit
+        </Button>
+        )}
+        
+        {/* Show error message */}
+        {takeUpMessage && (
+          <Typography>{takeUpMessage}</Typography>
+        )}
+          </Paper>
+        </Box>
+      )}
+      
     </Grid>
 
-    
     </Grid>
     </React.Fragment>
   );

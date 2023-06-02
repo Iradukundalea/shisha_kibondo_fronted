@@ -6,6 +6,8 @@ import nurseReducer from "./reducers/NurseReducer";
 import beneficialReducer from "./reducers/BeneficialReducer"
 import ubudeheReducer from "./reducers/UbudeheReducer";
 import userReducer from './reducers/UserReducer'
+import takeUpReducer from "./reducers/TakingUpReducer";
+import productReducer from "./reducers/productReducer";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -16,6 +18,8 @@ const rootReducer = combineReducers({
   beneficialState: beneficialReducer,
   ubudeheState: ubudeheReducer,
   userState: userReducer,
+  takeUpState: takeUpReducer,
+  productState: productReducer,
 
 });
 
