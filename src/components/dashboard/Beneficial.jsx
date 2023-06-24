@@ -32,7 +32,7 @@ import Steppers from './Steppers';
 import Orders from './Orders';
 import Copyright from '../copyright';
 import { useSelector, useDispatch } from 'react-redux'
-import { getBeneficials } from '../../redux/actions/BeneficialsActions';
+import { getBeneficials, getBeneficialsInMyRegion } from '../../redux/actions/BeneficialsActions';
 import { useEffect, useState } from 'react';
 import Loading from './Loading'
 import {getCurrentUser} from '../../utils/getCurrentUser'
@@ -49,9 +49,14 @@ export default function Beneficial() {
   const [currentUser, setCurrentUser] = useState('')
 
   useEffect(()=>{
-    dispatch(getBeneficials())
     setCurrentUser(getCurrentUser())
-  },[])
+    if(currentUser.role === 'umujyanama wubuzima'){
+      dispatch(getBeneficialsInMyRegion())
+    }
+    else{
+      dispatch(getBeneficials())
+    }
+  },[currentUser.role])
 
   return (
     <>

@@ -24,7 +24,9 @@ import { mainListItems, secondaryListItems, thirdListItems } from '../dashboard/
 // import Deposits from './Deposits';
 // import Orders from './Orders';
 // import Copyright from '../copyright';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import NotificationBadge from '../NotificationBadge';
+import { fetchNotifications } from '../../redux/actions/NotificationsActions'
 
 const drawerWidth = 240;
 
@@ -86,8 +88,13 @@ export default function DashboardLayout() {
   const location = useLocation();
   const pathnames = location.pathname.split('/').filter((x) => x);
 
-  return (
+  const dispatch = useDispatch()
+  
+  React.useEffect(()=>{
+    dispatch(fetchNotifications())
+  }, [])
 
+  return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
@@ -122,11 +129,7 @@ export default function DashboardLayout() {
             <Typography>
               Hello, {user?.user?.firstName} {user?.user?.lastName}
             </Typography>
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
+            <NotificationBadge />
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>

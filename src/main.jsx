@@ -7,8 +7,7 @@ import { Provider } from 'react-redux'
 import store from './redux/store'
 import axios from "axios";
 // axios.defaults.baseURL = "https://shisha-be.onrender.com/api";
-axios.defaults.baseURL = "http://localhost:5000/api";
-
+axios.defaults.baseURL = "http://localhost:5003/api";
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>

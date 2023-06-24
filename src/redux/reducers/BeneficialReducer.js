@@ -16,6 +16,7 @@ const beneficialReducer = (state= beneficialState, action)=>{
     case actionTypes.LIST_BENEFICIALS_SUCCESS_NOT_FOUND:
       const newBeneficialState = {
         ...beneficialState,
+        beneficials: [],
         message: action.payload,
       }
       return newBeneficialState

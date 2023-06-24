@@ -11,7 +11,19 @@ const getBeneficials = ()=>{
         if(data.response){
             dispatch({type: actionTypes.LIST_BENEFICIALS_SUCCESS, payload: data.response})
         }
-        console.log('Beneficials', data)
+    }
+}
+
+const getBeneficialsInMyRegion = ()=>{
+    return async (dispatch) =>{
+        dispatch({type: actionTypes.LIST_BENEFICIALS_REQUEST})
+        const { data } = await axios.get('/getBeneficials/my-region')
+        if(data.message){
+            dispatch({type: actionTypes.LIST_BENEFICIALS_SUCCESS_NOT_FOUND, payload: data.message})
+        }
+        if(data.response){
+            dispatch({type: actionTypes.LIST_BENEFICIALS_SUCCESS, payload: data.response})
+        }
     }
 }
 
@@ -35,7 +47,6 @@ const addNewBeneficial = (beneficialData, hideForm) => {
                 nurseId: beneficialData.nurseId
             }
 
-            console.log('BODY DATA', bodyData);
             const { data } = await axios.post('/addBeneficial', bodyData);
             
             if(data){
@@ -46,12 +57,12 @@ const addNewBeneficial = (beneficialData, hideForm) => {
             
         } catch (error) {
             dispatch({type: actionTypes.ADD_BENEFICIAL_ERROR, payload: error?.response?.data?.message})
-            
         }
         
     }
 }
 export {
     getBeneficials,
-    addNewBeneficial
+    addNewBeneficial,
+    getBeneficialsInMyRegion
 }

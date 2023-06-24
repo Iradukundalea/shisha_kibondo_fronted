@@ -33,7 +33,7 @@ import { getNurses } from '../../redux/actions/NursesActions'
 
 import Loading from './Loading'
 import AddNurse from './AddNurse';
-
+import { formattedTimestamp } from '../../utils/formatTime';
 
 function preventDefault(event) {
   event.preventDefault();
@@ -76,7 +76,7 @@ export default function Nurses() {
               <TableCell sx={{ fontWeight: 'bold'}}>Email</TableCell>
               <TableCell sx={{ fontWeight: 'bold'}}>Sex</TableCell>
               <TableCell sx={{ fontWeight: 'bold'}}>Phone</TableCell>
-              {/* <TableCell>Degree</TableCell> */}
+              <TableCell sx={{ fontWeight: 'bold'}}>Address</TableCell>
               {/* <TableCell>Specilialized</TableCell> */}
               <TableCell sx={{ fontWeight: 'bold'}}>JoinedAt</TableCell>
             </TableRow>
@@ -89,9 +89,15 @@ export default function Nurses() {
                 <TableCell>{row?.email}</TableCell>
                 <TableCell>{row?.sex}</TableCell>
                 <TableCell>{row?.telephone}</TableCell>
-                {/* <TableCell>{row.degree}</TableCell> */}
+                <TableCell>
+                  {row?.province}, 
+                  {row?.district}, 
+                  {row?.sector}, 
+                  {row?.cell}, 
+                  {row?.village}
+                </TableCell>
                 {/* <TableCell>{row.specialized}</TableCell> */}
-                <TableCell>{new Date(row?.createdAt).toLocaleDateString()}</TableCell>
+                <TableCell>{formattedTimestamp(row?.createdAt)}</TableCell>
               </TableRow>
               
             ))}
