@@ -67,41 +67,42 @@ export default function Advisor() {
         {
           !advisors?.length? (<Typography>Currently, no advisor.</Typography>)
           :
-          <Table size="small" padding="checkbox">
-          <TableHead>
-            <TableRow>
-              <TableCell sx={{ fontWeight: 'bold'}}>Name</TableCell>
-              {/* <TableCell>LastName</TableCell> */}
-              <TableCell sx={{ fontWeight: 'bold'}}>Email</TableCell>
-              <TableCell sx={{ fontWeight: 'bold'}}>Sex</TableCell>
-              <TableCell sx={{ fontWeight: 'bold'}}>Phone</TableCell>
-              <TableCell sx={{ fontWeight: 'bold'}}>Address</TableCell>
-              {/* <TableCell>Specilialized</TableCell> */}
-              <TableCell sx={{ fontWeight: 'bold'}}>JoinedAt</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {advisors?.map((row, index) => (
-              <TableRow key={index} hover={true}>
-                <TableCell>{row?.firstName} {row?.lastName}</TableCell>
-                {/* <TableCell>{row.lastName}</TableCell> */}
-                <TableCell>{row?.email}</TableCell>
-                <TableCell>{row?.sex}</TableCell>
-                <TableCell>{row?.telephone}</TableCell>
-                <TableCell>
-                  {row?.province}, 
-                  {row?.district}, 
-                  {row?.sector}, 
-                  {row?.cell}, 
-                  {row?.village}
-                </TableCell>
-                {/* <TableCell>{row.specialized}</TableCell> */}
-                <TableCell>{formattedTimestamp(row?.createdAt)}</TableCell>
-              </TableRow>
-              
-            ))}
-          </TableBody>
-          </Table>
+          (
+            <>
+              <Title>Advisors</Title>
+              <Table size="small" padding="checkbox">
+              <TableHead>
+                <TableRow>
+                  <TableCell sx={{ fontWeight: 'bold'}}>Name</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold'}}>Email</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold'}}>Sex</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold'}}>Phone</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold'}}>Address</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold'}}>JoinedAt</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {advisors?.map((row, index) => (
+                  <TableRow key={index} hover={true}>
+                    <TableCell>{row?.firstName} {row?.lastName}</TableCell>
+                    <TableCell>{row?.email}</TableCell>
+                    <TableCell>{row?.sex}</TableCell>
+                    <TableCell>{row?.telephone}</TableCell>
+                    <TableCell>
+                      {row?.province}, {row?.district}, 
+                      {row?.sector}, {row?.cell}, 
+                      {row?.village}
+                    </TableCell>
+                    <TableCell>{formattedTimestamp(row?.createdAt)}</TableCell>
+                  </TableRow>
+                  
+                ))}
+              </TableBody>
+              </Table>
+            </>
+          )
+          
+          
         }
         
        </>

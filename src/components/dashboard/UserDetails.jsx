@@ -25,6 +25,7 @@ import { listProductsAction } from '../../redux/actions/ProductActions';
 import { donateToBeneficial } from '../../redux/actions/TakingUpActions'; 
 import { useDispatch, useSelector } from 'react-redux';
 import {getCurrentUser} from '../../utils/getCurrentUser'
+import AddGuardianForm from './AddGuardian';
 
 function preventDefault(event) {
   event.preventDefault();
@@ -35,12 +36,22 @@ export default function UserDetails() {
   const [showDonateForm, setShowDonateForm] = React.useState(false)
   const [productCatId, setProductCatId] = React.useState('')
   const [quantity, setQuantity] = React.useState('')
+  const [showAddGuardianForm, setShowAddGuardianForm] = React.useState(false)
   
   const dispatch = useDispatch()
 
-  const { details } = useSelector((state)=> state.userState)
-  const { transactions, loading: loadingTakeup, message: takeUpMessage } = useSelector((state)=> state.takeUpState)
-  const { list: productsList } = useSelector((state)=> state.productState)
+  const { details, list: productsList, transactions, loading: loadingTakeup, message: takeUpMessage, detailsLoading } = useSelector(({
+    userState: { details, loading: detailsLoading },
+    productState: { list },
+    takeUpState: { transactions, loading, message },
+  }) => ({
+    details,
+    list,
+    transactions,
+    loading,
+    message,
+    detailsLoading
+  }))
 
   const { userId } = useParams();
 
@@ -131,6 +142,8 @@ export default function UserDetails() {
             {details.province}, {details.district}, {details.sector}, {details.cell},{' '}
             {details.village}
           </Typography>
+          <Divider sx={{ width: '100%', my: 1 }} />
+          <Button variant='outlined'>Rendez-vous</Button>
           </Grid>        
       </Paper>
     </Grid>
@@ -174,6 +187,7 @@ export default function UserDetails() {
           ))}
           </List>
 
+          <Divider sx={{ width: '100%', my: 1 }} />
           {/* show add new guardian button */}
           { currentUser.role === 'Nurse' && (
             <Box 
@@ -184,17 +198,35 @@ export default function UserDetails() {
                 p: 2
               }}
             >
-              <Button
+              {showAddGuardianForm ? (
+                <Button
                   // type="submit"
                   size="small"
                   variant="outlined"
                   // sx={{ mt: 2, mb: 2, mr:4 }}
+                  onClick={() => setShowAddGuardianForm(false)}
+                >
+                  Hide
+              </Button>
+              ): (
+                <Button
+                  size="small"
+                  variant="outlined"
+                  onClick={() => setShowAddGuardianForm(true)}
                 >
                   + Add new guardian
               </Button>
+              )}
             </Box>
           )}
-          
+
+          {showAddGuardianForm && 
+            <AddGuardianForm 
+              beneficialId={userId} 
+              detailsLoading={detailsLoading} 
+              setShowAddGuardianForm={setShowAddGuardianForm}
+            />
+          }
         </Paper>
       ): '' }
      

@@ -5,7 +5,8 @@ const userState = {
     loading: false,
     details: {},
     message: '',
-    error: ''
+    error: '',
+    guardians: []
 };
 
 const userReducer = (state= userState, action)=>{
@@ -22,6 +23,17 @@ const userReducer = (state= userState, action)=>{
     }
     return newState 
 
+    case actionTypes.ADD_GUARDIAN_REQUEST:
+      return { ...state, loading: true }
+
+    case actionTypes.ADD_GUARDIAN_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        details: {...state.details, ...state.details.guardians.push(action.payload)},
+      }
+      
+    
     default:
       return state
   }

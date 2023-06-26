@@ -5,7 +5,8 @@ const productState = {
     loading: false,
     list: [],
     message: '',
-    error: ''
+    error: '',
+    productCategory: ''
 };
 
 const productReducer = (state= productState, action)=>{
@@ -21,6 +22,11 @@ const productReducer = (state= productState, action)=>{
         error: ''
     }
     return newState 
+    case actionTypes.PRODUCT_CATEGORY_DETAILS:
+      return {
+        ...state,
+        productCategory: action.payload
+      }
 
     default:
       return state

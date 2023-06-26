@@ -69,6 +69,15 @@ const MainListItems = () => {
       </ListItemButton>
     </Link>
 
+    <Link to='/dashboard/stock'>
+      <ListItemButton>
+        <ListItemIcon>
+          <ShoppingCartIcon />
+        </ListItemIcon>
+        <ListItemText primary="Stock" />
+      </ListItemButton>
+    </Link>
+
     <Link to='/dashboard/deposits'>
       <ListItemButton>
         <ListItemIcon>

@@ -48,7 +48,7 @@ const useSocket = () => {
       });
       console.log('New Socket Notification', notification)
     })
-  }, []);
+  }, [isFirstInteraction]);
 
   return { socket };
 };

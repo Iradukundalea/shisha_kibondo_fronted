@@ -1,126 +1,3 @@
-// import React, { useState } from 'react';
-// import { Stepper, Step, StepLabel, Button, Typography, 
-//     TextField, FormControl, FormGroup, FormLabel, FormControlLabel, Checkbox 
-// } from '@mui/material';
-
-// const steps = ['Check Category', 'Add new People', 'Results'];
-
-// const StepperExample = () => {
-//   const [activeStep, setActiveStep] = useState(0);
-//   const [category, setCategory] = useState('');
-//   const [people, setPeople] = useState([]);
-//   const [selectedPeople, setSelectedPeople] = useState([]);
-
-//   const handleNext = () => {
-//     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-//   };
-
-//   const handleBack = () => {
-//     setActiveStep((prevActiveStep) => prevActiveStep - 1);
-//   };
-
-//   const handleCategoryChange = (event) => {
-//     setCategory(event.target.value);
-//   };
-
-//   const handlePersonChange = (event, person) => {
-//     if (event.target.checked) {
-//       setSelectedPeople((prevSelectedPeople) => [...prevSelectedPeople, person]);
-//     } else {
-//       setSelectedPeople((prevSelectedPeople) => prevSelectedPeople.filter((p) => p !== person));
-//     }
-//   };
-
-//   const handleSubmit = (event) => {
-//     event.preventDefault();
-//     // Handle form submission logic here, e.g., saving the people to a database
-//     // You can access the selectedPeople array to perform further actions
-//   };
-
-//   const getStepContent = (step) => {
-//     switch (step) {
-//       case 0:
-//         return (
-//           <div>
-//             <Typography variant="h5">Check Category</Typography>
-//             <TextField
-//               label="Category"
-//               value={category}
-//               onChange={handleCategoryChange}
-//               fullWidth
-//               margin="normal"
-//             />
-//             <Button variant="contained" color="primary" onClick={handleNext}>
-//               Next
-//             </Button>
-//           </div>
-//         );
-//       case 1:
-//         return (
-//           <div>
-//             <Typography variant="h5">Add new People</Typography>
-//             <form onSubmit={handleSubmit}>
-//               <FormControl component="fieldset">
-//                 <FormLabel component="legend">Select People</FormLabel>
-//                 <FormGroup>
-//                   {people.map((person) => (
-//                     <FormControlLabel
-//                       key={person}
-//                       control={
-//                         <Checkbox
-//                           checked={selectedPeople.includes(person)}
-//                           onChange={(event) => handlePersonChange(event, person)}
-//                           value={person}
-//                         />
-//                       }
-//                       label={person}
-//                     />
-//                   ))}
-//                 </FormGroup>
-//               </FormControl>
-//               <Button onClick={handleBack}>Back</Button>
-//               <Button type="submit" variant="contained" color="primary" onClick={handleNext}>
-//                 Next
-//               </Button>
-//             </form>
-//           </div>
-//         );
-//       case 2:
-//         return (
-//           <div>
-//             <Typography variant="h5">Results</Typography>
-//             <Typography variant="body1">Selected People:</Typography>
-//             <ul>
-//               {selectedPeople.map((person) => (
-//                 <li key={person}>{person}</li>
-//               ))}
-//             </ul>
-//             <Button onClick={handleBack}>Back</Button>
-//           </div>
-//         );
-//       default:
-//         return null;
-//     }
-//   };
-
-//   return (
-//     <div>
-//       <Stepper activeStep={activeStep}>
-//         {steps.map((label, index) => (
-//           <Step key={label}>
-//             <StepLabel>{label}</StepLabel>
-//           </Step>
-//         ))}
-//       </Stepper>
-//       {getStepContent(activeStep)}
-//     </div>
-//   );
-// };
-
-// export default StepperExample;
-
-
-
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
@@ -138,7 +15,6 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import MuiInput from '@mui/material/Input';
 import Select from '@mui/material/Select';
 import { useSelector, useDispatch } from 'react-redux';
 import { checkUbudeheCategoryAction } from '../../redux/actions/CheckUbudeheCategoryAction';
@@ -147,7 +23,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import {getCurrentUser} from '../../utils/getCurrentUser'
 
-export default function Steppers ({ setShowAddForm}){
+export default function Steppers ({ setShowAddForm }){
     const [activeStep, setActiveStep] = React.useState(0)
 
     const handleNextStep = ()=>{
@@ -179,7 +55,6 @@ export default function Steppers ({ setShowAddForm}){
 
     useEffect(()=>{
         const user = getCurrentUser();
-        console.log('OUTUUUUUUUT', user)
         setNurseId(user.id)
     }, [])
 
@@ -219,7 +94,6 @@ export default function Steppers ({ setShowAddForm}){
         const beneficialFirstName = data.get('beneficial-firstName')
         const beneficialLastName = data.get('beneficial-lastName')
         const beneficialTelephone = data.get('beneficial-telephone')
-        // const beneficialSex = data.get('beneficial-sex')
         const beneficialSex = sex
 
         const healthCenter = data.get('health-center')
@@ -396,47 +270,47 @@ export default function Steppers ({ setShowAddForm}){
                             </RadioGroup>
                             </FormControl>
 
-                                {/* <FormControl>
-                                    <FormLabel id="sex-radio-buttons-group-label">Sex</FormLabel>
-                                    <RadioGroup
-                                        row
-                                        aria-labelledby="sex-radio-buttons-group-label"
-                                        defaultValue={results?.spouse?.sex}
-                                        value={results?.spouse?.sex}
-                                        onChange={handleSexChange}
-                                        name="beneficial-sex"
-                                    >
-                                        <FormControlLabel 
-                                            value="female" 
-                                            // disabled={results?.spouse?.sex !== 'female'}
-                                            control={<Radio />} 
-                                            label="Female" 
-                                        />
-                                        <FormControlLabel 
-                                            value="male" 
-                                            // disabled={results?.spouse?.sex !== 'male'}
-                                            control={<Radio />} 
-                                            label="Male" 
-                                        />
-                                        <FormControlLabel 
-                                            value="other" 
-                                            // disabled={results?.spouse?.sex !== 'other'}
-                                            control={<Radio />} 
-                                            label="Other" 
-                                        />
-                                    </RadioGroup>
-                                </FormControl> */}
-                                
-                                {/* <RadioGroup
-                                    name="beneficial-sex"
-                                    // value={value}
-                                    // onChange={handleRadioChange}
+                            {/* <FormControl>
+                                <FormLabel id="sex-radio-buttons-group-label">Sex</FormLabel>
+                                <RadioGroup
                                     row
-                                    >
-                                    <FormControlLabel value="female" control={<Radio />} label="Female" />
-                                    <FormControlLabel value="male" control={<Radio />} label="Male" />
-                                    <FormControlLabel value="other" control={<Radio />} label="Other" />
-                                </RadioGroup> */}
+                                    aria-labelledby="sex-radio-buttons-group-label"
+                                    defaultValue={results?.spouse?.sex}
+                                    value={results?.spouse?.sex}
+                                    onChange={handleSexChange}
+                                    name="beneficial-sex"
+                                >
+                                    <FormControlLabel 
+                                        value="female" 
+                                        // disabled={results?.spouse?.sex !== 'female'}
+                                        control={<Radio />} 
+                                        label="Female" 
+                                    />
+                                    <FormControlLabel 
+                                        value="male" 
+                                        // disabled={results?.spouse?.sex !== 'male'}
+                                        control={<Radio />} 
+                                        label="Male" 
+                                    />
+                                    <FormControlLabel 
+                                        value="other" 
+                                        // disabled={results?.spouse?.sex !== 'other'}
+                                        control={<Radio />} 
+                                        label="Other" 
+                                    />
+                                </RadioGroup>
+                            </FormControl> */}
+                                
+                            {/* <RadioGroup
+                                name="beneficial-sex"
+                                // value={value}
+                                // onChange={handleRadioChange}
+                                row
+                                >
+                                <FormControlLabel value="female" control={<Radio />} label="Female" />
+                                <FormControlLabel value="male" control={<Radio />} label="Male" />
+                                <FormControlLabel value="other" control={<Radio />} label="Other" />
+                            </RadioGroup> */}
 
                                 <TextField 
                                     id="standard-basic" 

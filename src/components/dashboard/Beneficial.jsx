@@ -1,35 +1,15 @@
 import * as React from 'react';
-// import Link from '@mui/material/Link';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Title from './Title';
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import MuiDrawer from '@mui/material/Drawer';
-import Box from '@mui/material/Box';
-import MuiAppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
-import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import { mainListItems, secondaryListItems, thirdListItems } from './listItems';
-import Chart from './Chart';
-import CheckCategory from './CheckCategory';
 import Steppers from './Steppers';
-import Orders from './Orders';
 import Copyright from '../copyright';
 import { useSelector, useDispatch } from 'react-redux'
 import { getBeneficials, getBeneficialsInMyRegion } from '../../redux/actions/BeneficialsActions';
@@ -84,7 +64,7 @@ export default function Beneficial() {
 
     <Grid container spacing={3}>
     {/* Steppers */}
-      <Grid item xs={12} md={8} lg={12}>
+      <Grid item xs={12} md={12} lg={12}>
       {showAddForm ? (
         <Paper 
         sx={{
@@ -110,7 +90,10 @@ export default function Beneficial() {
             <>
               { beneficalMessage? (<Typography>{ beneficalMessage }</Typography>) 
               : 
-              <Table size="small" padding="checkbox">
+              ( 
+              <>
+                <Title>Beneficials</Title>
+                <Table size="small" padding="checkbox">
                 <TableHead>
                   <TableRow>
                     <TableCell sx={{ fontWeight: 'bold'}}>Name</TableCell>
@@ -146,6 +129,10 @@ export default function Beneficial() {
                   ))}
                 </TableBody>
               </Table>
+              </>
+             
+              )
+              
               }
             </>
         }
