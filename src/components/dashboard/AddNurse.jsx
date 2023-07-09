@@ -117,12 +117,11 @@ export default function AddAdvisor() {
     const isAnyFieldEmpty = () => {
       return !(province && district && sector && cell && village);
     };
-    console.log('DDDDSSSSSOOOOOOOPPPTIO', districtOptions)
 
   return (
     <React.Fragment>
       <Title>Add new nurse</Title>
-      <p>{error}</p>
+      {/* <p>{error}</p> */}
       <Box component="form" onSubmit={handleSaveNurse} noValidate sx={{ mt: 0 }} ref={nurseformRef}>
             <TextField 
                 id="standard-basic"

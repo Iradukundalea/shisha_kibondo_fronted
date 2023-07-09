@@ -15,31 +15,36 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Copyright from '../copyright';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
-import { LoginAuthAction } from '../../redux/actions/AuthAction'
-
+import { requestPasswordReset } from '../../redux/actions/ResetPasswordActions'
 
 const defaultTheme = createTheme();
 
-export default function SignIn() {
+export default function ForgotPassword() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const state = useSelector((state)=> state.authState);
+  const { resetLoading, error: passwordResetError } = useSelector(
+    ({
+      passwordReset: { loading :resetLoading, error },
+    }) => ({
+      resetLoading,
+      error
+    })
+  );
 
-  const handleSubmit = (event) => {
+  const handlePasswordReset = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     
     const email = data.get('email')
-    const  password = data.get('password')
+
     console.log('Credentials', {
-      email,
-      password
+      email
     })
 
-    dispatch(LoginAuthAction({email, password}, navigate))
-  };
+    dispatch(requestPasswordReset(email))
 
+  };
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -57,9 +62,9 @@ export default function SignIn() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign into Shisha
+            Reset Your Password
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Box component="form" onSubmit={handlePasswordReset} noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
@@ -70,59 +75,37 @@ export default function SignIn() {
               autoComplete="email"
               autoFocus
             />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-            {/* <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            /> */}
-            {state.loading ? (
+
+            {resetLoading ? (
               <Button
-              fullWidth
-              variant="outlined"
-              sx={{ mt: 3, mb: 2 }}
-              disabled
-            >
-              LogingIn...
-            </Button>
-            ): 
-            <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 1, mb: 2 }}
               // disabled
             >
-              Sign In
+              Sending...
             </Button>
-          }
-
-          {/* {
-            state.error ? (
-            <Typography component="h1" variant="h5">
-              {state.error}
-            </Typography>): ''
-          } */}
+            ) : (
+              <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 1, mb: 2 }}
+              // disabled
+            >
+              Send
+            </Button>
+            )}
           
             <Grid container>
-              <Grid item xs>
-                <Link href="/auth/forgot-password" variant="body2">
-                  Forgot password?
+              {/*  */}
+              <Grid item>
+                Already have an account?
+                <Link href="/login" variant="body2">
+                  {" Login"}
                 </Link>
               </Grid>
-              {/* <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid> */}
             </Grid>
           </Box>
         </Box>

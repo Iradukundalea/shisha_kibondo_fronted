@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Title from './Title';
 import Grid from '@mui/material/Grid';
@@ -16,6 +15,7 @@ import { addNewAdvisor } from '../../redux/actions/AdvisorActions';
 import { useRef, useState } from 'react';
 import Select from '../Select'
 import { Provinces, Districts, Sectors, Cells, Villages } from 'rwanda'
+import { errorToast } from '../../utils/generateToast'
 
 function preventDefault(event) {
   event.preventDefault();
@@ -133,7 +133,7 @@ export default function AddAdvisor() {
   return (
     <React.Fragment>
       <Title>Add new advisor</Title>
-      <p>{error}</p>
+      {/* <p>{error? errorToast( error ): ''}</p> */}
       <Box component="form" onSubmit={handleSaveAdvisor} noValidate sx={{ mt: 0 }} ref={formRef}>
             <TextField 
                 id="standard-basic"
@@ -235,7 +235,7 @@ export default function AddAdvisor() {
             >
               Save
             </Button>
-          </Box>
+      </Box>
       <div>
         {/* <Link color="primary" href="#" onClick={preventDefault}>
           View balance

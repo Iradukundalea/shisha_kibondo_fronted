@@ -1,5 +1,6 @@
 import axios from "axios";
 import * as actionTypes from '../actionTypes'
+import { errorToast} from '../../utils/generateToast'
 
 const AuthActionType = {
   LOGIN_SUCCESS: "LOGIN_SUCCESS",
@@ -19,6 +20,7 @@ const LoginAuthAction = (loginData, navigate) => {
 
       if(resp.data.message){
         dispatch({type: actionTypes.LOGIN_FAIL, payload: resp.data.message})
+        errorToast(resp.data.message)
       }
 
       if(resp.data.loginToken){
@@ -29,6 +31,7 @@ const LoginAuthAction = (loginData, navigate) => {
 
     }).catch((error)=>{
       dispatch({type: actionTypes.LOGIN_FAIL, payload: error.message})
+      errorToast(error.message)
     })
   
   };
@@ -47,7 +50,7 @@ const loadUserFromLocalStorage = () => {
 const logout = (navigate)=>{
   return (dispatch)=>{
     dispatch({type: actionTypes.LOGOUT_SUCCESS})
-    navigate('/')
+    navigate('/login')
   }
 }
 

@@ -1,5 +1,6 @@
 import * as actionTypes from '../actionTypes'
 import axios from 'axios';
+import { successToast, errorToast } from '../../utils/generateToast'
 
 const getBeneficials = ()=>{
     return async (dispatch) =>{
@@ -51,12 +52,15 @@ const addNewBeneficial = (beneficialData, hideForm) => {
             
             if(data){
                 dispatch({type: actionTypes.ADD_BENEFICIAL_SUCCESS, payload: data})
-
+                // hide a form
                 hideForm()
+                // show a toast
+                successToast('Beneficiary added successfully.')
             }
             
         } catch (error) {
             dispatch({type: actionTypes.ADD_BENEFICIAL_ERROR, payload: error?.response?.data?.message})
+            errorToast(error?.response?.data?.message)
         }
         
     }

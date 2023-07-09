@@ -1,5 +1,6 @@
 import * as actionTypes from '../actionTypes'
 import axios from 'axios';
+import { successToast, errorToast } from '../../utils/generateToast';
 
 const getUserDetails = (userId)=>{
     return async (dispatch) =>{
@@ -27,13 +28,15 @@ const addGuardianAction = (userId, guardianData, clearForm)=>{
             cell: guardianData.cell,
             village: guardianData.village
         }
-        console.log('TTTTHHHHEEEOOOOOOGGGGGEEEEENNNNNE bodyData', bodyData)
 
         const { data } = await axios.post(`/beneficials/${userId}/addGuardian`, bodyData)
-        console.log('TTTTHHHHEEEOOOOOOGGGGGEEEEENNNNNE', data)
         if(data){
             dispatch({type: actionTypes.ADD_GUARDIAN_SUCCESS, payload: data})
+            // clean a form
             clearForm()
+
+            // show a toast
+            successToast('Guardian added successfully.')
         }  
     }
 }

@@ -59,49 +59,13 @@ const MainListItems = () => {
         <ListItemText primary="Beneficials" />
       </ListItemButton>
     </Link>
-    
-    <Link to='/dashboard/orders'>
+
+    <Link to='/dashboard/stocks'>
       <ListItemButton>
         <ListItemIcon>
           <ShoppingCartIcon />
         </ListItemIcon>
-        <ListItemText primary="Orders" />
-      </ListItemButton>
-    </Link>
-
-    <Link to='/dashboard/stock'>
-      <ListItemButton>
-        <ListItemIcon>
-          <ShoppingCartIcon />
-        </ListItemIcon>
-        <ListItemText primary="Stock" />
-      </ListItemButton>
-    </Link>
-
-    <Link to='/dashboard/deposits'>
-      <ListItemButton>
-        <ListItemIcon>
-          <LayersIcon />
-        </ListItemIcon>
-        <ListItemText primary="Deposits" />
-      </ListItemButton>
-    </Link>
-
-    <Link to='/dashboard/customers'>
-      <ListItemButton>
-        <ListItemIcon>
-          <PeopleIcon />
-        </ListItemIcon>
-        <ListItemText primary="Customers" />
-      </ListItemButton>
-    </Link>
-    
-    <Link to='/dashboard/reports'>
-      <ListItemButton>
-        <ListItemIcon>
-          <BarChartIcon />
-        </ListItemIcon>
-        <ListItemText primary="Reports" />
+        <ListItemText primary="Stocks" />
       </ListItemButton>
     </Link>
   </React.Fragment>

@@ -16,9 +16,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-
-
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { getUserDetails } from '../../redux/actions/UserActions';
 import { getBeneficialTakingUpTransactions } from '../../redux/actions/TakingUpActions'
 import { listProductsAction } from '../../redux/actions/ProductActions';
@@ -143,11 +141,14 @@ export default function UserDetails() {
             {details.village}
           </Typography>
           <Divider sx={{ width: '100%', my: 1 }} />
-          <Button variant='outlined'>Rendez-vous</Button>
+          <Link to="/dashboard/rendez-vous">
+            <Button variant='outlined'>
+              Rendez-vous
+            </Button>
+          </Link>
           </Grid>        
       </Paper>
     </Grid>
-
     
     {/* Guardians */}
     <Grid item xs={12} md={4} lg={5}>
@@ -360,9 +361,9 @@ export default function UserDetails() {
         )}
         
         {/* Show error message */}
-        {takeUpMessage && (
+        {/* {takeUpMessage && (
           <Typography>{takeUpMessage}</Typography>
-        )}
+        )} */}
           </Paper>
         </Box>
       )}

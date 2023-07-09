@@ -1,5 +1,7 @@
 import * as actionTypes from '../actionTypes'
 import axios from 'axios';
+import { successToast, errorToast } from '../../utils/generateToast'
+
 
 const getBeneficialTakingUpTransactions = (userId)=>{
     return async (dispatch) =>{
@@ -16,16 +18,19 @@ const donateToBeneficial = (productCategoryId, beneficialId, quantity, setShowDo
         try {
             dispatch({type: actionTypes.DONATE_REQUEST})
             const { data } = await axios.post(`/donate-product-to-beneficial/${productCategoryId}/${beneficialId}`, {quantity})
-            console.log('Transactions', data)
-            if(data.response){
-                dispatch({type: actionTypes.DONATE_SUCCESS, payload: data.response})
+
+            if(data){
+                dispatch({type: actionTypes.DONATE_SUCCESS, payload: data})
                 setShowDonateForm(false)
+
+                // show a toast
+                successToast('Product donated successfully')
             }
             
         } catch (error) {
             dispatch({type: actionTypes.DONATE_STOCKOUT_MESSAGE, payload: error.response.data.message})
+            errorToast(error?.response?.data?.message)
         }
-            
     }
 }
 

@@ -101,8 +101,6 @@ export default function Advisor() {
               </Table>
             </>
           )
-          
-          
         }
         
        </>

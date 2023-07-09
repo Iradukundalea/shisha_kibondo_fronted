@@ -1,5 +1,6 @@
 import * as actionTypes from '../actionTypes'
 import axios from 'axios';
+import { successToast, errorToast } from '../../utils/generateToast';
 
 /**
  * 
@@ -15,12 +16,13 @@ const checkUbudeheCategoryAction = (IDNUMBER)=>{
             const { data } = await axios.get(`https://nida-simulation.onrender.com/people/${IDNUMBER}/find`)
         if(data.response){
             dispatch({type: actionTypes.CHECK_UBUDEHE_SUCCESS, payload: data.response})
+            successToast('Ubudehe category checked succcessfully')
         }
             
         } catch (error) {
             dispatch({type: actionTypes.CHECK_UBUDEHE_SUCCESS_NOT_FOUND, payload: error?.response?.data?.message})
+            errorToast(error?.message ? `${error?.message}` : `${error?.response?.data?.message}`)
         }
-        
     }
 }
 

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Copyright from '../copyright';
 import { useSelector, useDispatch } from 'react-redux'
@@ -12,6 +13,8 @@ import {
   getBeneficials, 
   getBeneficialsInMyRegion 
 } from '../../redux/actions/BeneficialsActions';
+
+// import useSocket from '../../hooks/useSocket'
 
 
 function preventDefault(event) {
@@ -44,7 +47,10 @@ export default function Dashboard() {
     }
 
     dispatch(listProductsAction())
-  }, [currentUser.role])
+  }, [currentUser?.role])
+
+  //
+  // const { socket } = useSocket();
 
   return (
     <>
@@ -93,7 +99,7 @@ export default function Dashboard() {
         <Typography
           sx={{ fontWeight: 'bold', px: 2, py:1 }}
         >
-          Beneficials
+          Beneficiaries
         </Typography>
         <Typography
           sx={{ fontWeight: 'bold', fontSize: 25, px: 2, py: 1 }}
@@ -107,7 +113,6 @@ export default function Dashboard() {
             More info
             <TrendingFlatSharpIcon />
           </Link>
-          
         </Typography>
       </Paper>
     </Grid>

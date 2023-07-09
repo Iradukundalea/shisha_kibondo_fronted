@@ -9,6 +9,8 @@ import userReducer from './reducers/UserReducer'
 import takeUpReducer from "./reducers/TakingUpReducer";
 import productReducer from "./reducers/productReducer";
 import notificationReducer from "./reducers/NotificationReducer";
+import passwordResetReducer from "./reducers/PasswordResetReducer"
+import stockInReducer from "./reducers/StockInReducer";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -21,7 +23,9 @@ const rootReducer = combineReducers({
   userState: userReducer,
   takeUpState: takeUpReducer,
   productState: productReducer,
-  notifications: notificationReducer
+  notifications: notificationReducer,
+  passwordReset: passwordResetReducer,
+  stock: stockInReducer,
 
 });
 

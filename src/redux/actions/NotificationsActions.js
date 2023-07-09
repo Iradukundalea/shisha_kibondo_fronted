@@ -24,7 +24,7 @@ const readNotification = (notificationId) => async (dispatch) => {
 
 const readAllNotifications = () => async (dispatch) => {
     const response = await axios.patch('/notifications/read-all');
-    if ((response.status = 200)) {
+    if ((response.status == 200)) {
       dispatch({
         type: actionTypes.READ_ALL_NOTIFICATIONS,
       });

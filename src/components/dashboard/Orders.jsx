@@ -1,65 +1,46 @@
 import * as React from 'react';
-import Link from '@mui/material/Link';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Title from './Title';
+import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import {useEffect} from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { getAdvisors } from '../../redux/actions/AdvisorActions'
 import Typography from '@mui/material/Typography';
 import Loading from './Loading'
-
-// Generate Order Data
-function createData(id, date, name, shipTo, paymentMethod, amount) {
-  return { id, date, name, shipTo, paymentMethod, amount };
-}
-
-// const rows = [
-//   createData(
-//     0,
-//     '16 Mar, 2019',
-//     'Elvis Presley',
-//     'Tupelo, MS',
-//     'VISA ⠀•••• 3719',
-//     312.44,
-//   ),
-//   createData(
-//     1,
-//     '16 Mar, 2019',
-//     'Paul McCartney',
-//     'London, UK',
-//     'VISA ⠀•••• 2574',
-//     866.99,
-//   ),
-//   createData(2, '16 Mar, 2019', 'Tom Scholz', 'Boston, MA', 'MC ⠀•••• 1253', 100.81),
-//   createData(
-//     3,
-//     '16 Mar, 2019',
-//     'Michael Jackson',
-//     'Gary, IN',
-//     'AMEX ⠀•••• 2000',
-//     654.39,
-//   ),
-//   createData(
-//     4,
-//     '15 Mar, 2019',
-//     'Bruce Springsteen',
-//     'Long Branch, NJ',
-//     'VISA ⠀•••• 5919',
-//     212.79,
-//   ),
-// ];
+import TrendingFlatSharpIcon from '@mui/icons-material/TrendingFlatSharp';
+import { listProductsAction } from '../../redux/actions/ProductActions';
+import { Link } from 'react-router-dom';
+import {getCurrentUser} from '../../utils/getCurrentUser'
+import { 
+  getBeneficials, 
+  getBeneficialsInMyRegion 
+} from '../../redux/actions/BeneficialsActions';
 
 function preventDefault(event) {
   event.preventDefault();
 }
 
 export default function Orders() {
+  const [currentUser, setCurrentUser] = React.useState('')
+
   const { advisors, loading } = useSelector((state)=> state.advisorState)
+
+  const { list: productList, user, beneficials } = useSelector(
+    ({
+      authState: { user },
+      productState: { list },
+      beneficialState: { beneficials }
+    }) => ({
+      user,
+      list,
+      beneficials
+    })
+  );
 
   const dispatch = useDispatch()
 
@@ -67,11 +48,87 @@ export default function Orders() {
     dispatch(getAdvisors())
   },[])
 
+  React.useEffect(()=>{
+    setCurrentUser(getCurrentUser())
+    if(currentUser.role === 'umujyanama wubuzima'){
+      dispatch(getBeneficialsInMyRegion())
+    }
+    else{
+      dispatch(getBeneficials())
+    }
+
+    dispatch(listProductsAction())
+  }, [currentUser?.role])
+
   console.log('CCCCCCCCCCCCCcc', loading)
 
   return (
     <React.Fragment>
-      <Paper>
+      <Grid container spacing={3}>
+        { currentUser.role !== 'umujyanama wubuzima' && productList?.map((product)=> (
+          <>
+            <Grid item xs={12} md={6} lg={6}>
+              <Paper
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  // height: 240,
+                }}
+              >
+                <Typography
+                  sx={{ fontWeight: 'bold', px: 2, py:1 }}
+                >
+                  {product.name}
+                </Typography>
+                <Typography
+                  sx={{ fontWeight: 'bold', fontSize: 25, px: 2, py: 1 }}
+                >
+                  {product.totalQuantity}
+                </Typography>
+                <Typography
+                  sx={{ backgroundColor: 'rgba(0,0,0,.1)', textAlign: 'center' }}
+                >
+                  <Link to={`/dashboard/stocks/${product.id}`}>
+                    More info
+                    <TrendingFlatSharpIcon />
+                  </Link>
+                </Typography>
+              </Paper>
+            </Grid>
+          </>
+        ))}
+        
+        <Grid item xs={12} md={6} lg={6}>
+              <Paper
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  // height: 240,
+                }}
+              >
+                <Typography
+                  sx={{ fontWeight: 'bold', px: 2, py:1 }}
+                >
+                 Beneficiaries
+                </Typography>
+                <Typography
+                  sx={{ fontWeight: 'bold', fontSize: 25, px: 2, py: 1 }}
+                >
+                  2
+                </Typography>
+                <Typography
+                  sx={{ backgroundColor: 'rgba(0,0,0,.1)', textAlign: 'center' }}
+                >
+                  <Link to={`/dashboard/stocks/`}>
+                    More info
+                    <TrendingFlatSharpIcon />
+                  </Link>
+                </Typography>
+              </Paper>
+            </Grid>
+      </Grid>
+
+      {/* <Paper>
        { loading ? 
       //  <Typography>Loading...</Typography> :
         <Loading /> : 
@@ -107,7 +164,8 @@ export default function Orders() {
         </Table>
        </>
        } 
-      </Paper>
+      </Paper> */}
+
     </React.Fragment>
   );
 }
