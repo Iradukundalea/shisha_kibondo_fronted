@@ -68,6 +68,14 @@ const MainListItems = () => {
         <ListItemText primary="Stocks" />
       </ListItemButton>
     </Link>
+    <Link to='/dashboard/appointments'>
+      <ListItemButton>
+        <ListItemIcon>
+          <ShoppingCartIcon />
+        </ListItemIcon>
+        <ListItemText primary="Appointments" />
+      </ListItemButton>
+    </Link>
   </React.Fragment>
   );
 };

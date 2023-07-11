@@ -141,7 +141,7 @@ export default function UserDetails() {
             {details.village}
           </Typography>
           <Divider sx={{ width: '100%', my: 1 }} />
-          <Link to="/dashboard/rendez-vous">
+          <Link to={`/dashboard/appointments/beneficial/${userId}`}>
             <Button variant='outlined'>
               Rendez-vous
             </Button>
