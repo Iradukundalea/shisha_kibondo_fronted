@@ -1,0 +1,8 @@
+.editable-input {
+    border: 1px solid blue;
+    padding: 4px;
+    font-weight: bold;
+    color: blue;
+    background-color: #f0f8ff;
+    border-radius: 4px;
+}

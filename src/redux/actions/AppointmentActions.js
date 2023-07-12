@@ -47,8 +47,25 @@ const setBeneficialAppointment = (beneficialId, appointmentDate, setshowCalendar
     }
 }
 
+const changeAppointmentStatus = (appointmentId, newStatus) => {
+    return async (dispatch) =>{
+        try{
+            const { data } = await axios.put(`/appointments/${appointmentId}/change-status`, { status: newStatus})
+            if(data?.response) {
+                dispatch({type: actionTypes.CHANGE_APPOINTMENT_STATUS, payload: data.response})
+                // show toast
+                successToast('Appointment status updated successfully!')
+            }
+        } catch(error){
+            errorToast(error?.response?.data?.message)
+        }
+        
+    }
+}
+
 export {
     getAppointments,
     getBeneficialAppointments,
-    setBeneficialAppointment
+    setBeneficialAppointment,
+    changeAppointmentStatus
 }

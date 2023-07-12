@@ -33,7 +33,19 @@ const appointmentReducer = (state= appointmentState, action)=>{
           return {
             ...appointmentState,
             list_appointments: [], // Clear the list_appointments array
-          };
+          }
+        
+        case actionTypes.CHANGE_APPOINTMENT_STATUS:
+          return {
+            ...state,
+            loading: false,
+            list_appointments: state.list_appointments.map((appointment)=>{
+              if(appointment.id === action.payload.id){
+                return { ...appointment, status: action.payload.status}
+              }
+              return appointment
+            }),
+          }
     default:
       return state
   }

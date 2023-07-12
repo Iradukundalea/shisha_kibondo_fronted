@@ -15,6 +15,10 @@ import {getCurrentUser} from '../../utils/getCurrentUser'
 import { getBeneficialAppointments } from '../../redux/actions/AppointmentActions';
 import RendezVous from './Calendar';
 import moment from 'moment';
+import MenuIcon from '@mui/icons-material/Menu'
+import './edit-input.css'
+import { changeAppointmentStatus } from '../../redux/actions/AppointmentActions'
+
 
 function preventDefault(event) {
   event.preventDefault();
@@ -27,6 +31,8 @@ export default function BeneficialAppointment() {
 
   const [showCalendar, setshowCalendar] = React.useState(false)
   const [currentUser, setCurrentUser] = React.useState('')
+  const [editableRowIndex, setEditableRowIndex] = React.useState(-1);
+  const [editableRows, setEditableRows] = React.useState([]);
 
   const { list_appointments } = useSelector(
     ({
@@ -46,6 +52,28 @@ export default function BeneficialAppointment() {
   const isShowCalendar =(value)=>{
     setshowCalendar(value)
   }
+
+  const handleStatusChange = (e, index) => {
+    const { value } = e.target;
+    setEditableRows((prevEditableRows) => {
+      const updatedRows = [...prevEditableRows];
+      updatedRows[index].status = value;
+      return updatedRows;
+    });
+  };
+
+  const saveRow = async (appointment, index) => {
+    console.log('saving111....')
+    await dispatch(changeAppointmentStatus(appointment.id, editableRows[index].status))
+    console.log('saving222....')
+
+    // Reset the editableRows state if needed
+    // setEditableRows([]);
+  };
+
+  const cancelEdit = () => {
+    setEditableRows([]);
+  };
 
   return (
     <>
@@ -80,23 +108,86 @@ export default function BeneficialAppointment() {
                     <TableRow>
                     <TableCell sx={{ fontWeight: 'bold'}}>NAME</TableCell>
                     <TableCell sx={{ fontWeight: 'bold'}}>STATUS</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold'}}>EXPIRATION DATE</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold'}}>DATE</TableCell>
+                    { currentUser.role === 'Nurse' && (
+                      <TableCell sx={{ fontWeight: 'bold'}}>ACTIONS</TableCell>
+                    )}
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {list_appointments?.map((appointment, index)=>(
                         <>
                         <TableRow key={index}>
-                            {appointment?.beneficial && (
+                        {currentUser.role === 'Nurse' && editableRows[index] ? (
+                          <>
+                          <TableCell>
+                            {appointment?.beneficial.firstName} {appointment?.beneficial.lastName}
+                          </TableCell>
+                          <TableCell>
+                            <select 
+                              className='editable-input' 
+                              value={editableRows[index].status}
+                              onChange={(e) => handleStatusChange(e, index)}
+                            >
+                              <option value="scheduled" disabled>scheduled</option>
+                              <option value="ongoing">ongoing</option>
+                              <option value="no show">no show</option>
+                              <option value="obeyed">obeyed</option>
+                            </select>
+                          </TableCell>
+                          <TableCell>
+                              {moment(appointment?.appointmentDate).fromNow()} | {appointment.appointmentDate}
+                          </TableCell>
+                          
+                          <TableCell>
+                            {/* Save button */}
+                            <button 
+                              onClick={() => saveRow(appointment, index)}
+                            > 
+                              <MenuIcon /> Save
+                            </button>
+                            {' '}
+                            {/* Cancel button */}
+                            <button 
+                              onClick={() => cancelEdit()}
+                            >
+                              <MenuIcon /> Cancel
+                            </button>
+                          </TableCell>
+                        </>
+                          ) : (
+                            <>
+                              {appointment?.beneficial && (
                                 <TableCell>
                                     {appointment?.beneficial.firstName} {appointment?.beneficial.lastName}
                                 </TableCell>
-                            )}
+                              )}
                             
-                            <TableCell>{appointment.status}</TableCell>
-                            <TableCell>
-                            {moment(appointment?.appointmentDate).fromNow()} | {appointment.appointmentDate}
-                            </TableCell>
+                              <TableCell>{appointment.status}</TableCell>
+                              <TableCell>
+                                {moment(appointment?.appointmentDate).fromNow()} | {appointment.appointmentDate}
+                              </TableCell>
+                              {currentUser.role === 'Nurse' && (
+                                <TableCell>
+                                  <button
+                                    onClick={() => setEditableRows((prevEditableRows) => {
+                                      const updatedRows = [...prevEditableRows];
+                                      updatedRows[index] = {
+                                        status: appointment.status,
+                                      };
+                                      return updatedRows;
+                                    })}
+                                  >
+                                    <MenuIcon 
+                                    
+                                  /> Edit
+                                  </button>
+                                
+                              </TableCell>
+                              )}
+                            </>
+                            
+                          ) }
                         </TableRow>
                         </>
                     ))}
