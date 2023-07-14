@@ -62,11 +62,29 @@ const addNewBeneficial = (beneficialData, hideForm) => {
             dispatch({type: actionTypes.ADD_BENEFICIAL_ERROR, payload: error?.response?.data?.message})
             errorToast(error?.response?.data?.message)
         }
-        
+    }
+}
+
+const reportBeneficiaryAction = (beneficialId, closeModal) =>{
+    return async (dispatch) =>{
+        try{
+            const { data } = await axios.put(`/beneficials/${beneficialId}/report-use-abuse`)
+            if(data.response.isReported){
+                dispatch({ type: actionTypes.REPORT_BENEFICIAL_USE_ABUSE_SUCCESS, payload: data.response})
+                
+                closeModal()
+
+                // show a toast
+                successToast('Beneficiary reported successfully!')
+            }
+        }catch(error){
+            errorToast(error)
+        }
     }
 }
 export {
     getBeneficials,
     addNewBeneficial,
-    getBeneficialsInMyRegion
+    getBeneficialsInMyRegion,
+    reportBeneficiaryAction
 }

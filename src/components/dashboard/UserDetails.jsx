@@ -24,6 +24,7 @@ import { donateToBeneficial } from '../../redux/actions/TakingUpActions';
 import { useDispatch, useSelector } from 'react-redux';
 import {getCurrentUser} from '../../utils/getCurrentUser'
 import AddGuardianForm from './AddGuardian';
+import Modal from './Modal'
 
 function preventDefault(event) {
   event.preventDefault();
@@ -35,6 +36,12 @@ export default function UserDetails() {
   const [productCatId, setProductCatId] = React.useState('')
   const [quantity, setQuantity] = React.useState('')
   const [showAddGuardianForm, setShowAddGuardianForm] = React.useState(false)
+
+  const [showModal, setShowModal] = React.useState(false)
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   
   const dispatch = useDispatch()
 
@@ -78,6 +85,13 @@ export default function UserDetails() {
 
   return (
     <React.Fragment>
+    <Modal 
+      open={open} 
+      handleOpen={handleOpen} 
+      handleClose={handleClose}
+      user={details}
+    />
+
     <Grid container spacing={3}>
     {/* Chart */}
     <Grid item xs={12} md={4} lg={3}>
@@ -141,11 +155,30 @@ export default function UserDetails() {
             {details.village}
           </Typography>
           <Divider sx={{ width: '100%', my: 1 }} />
-          <Link to={`/dashboard/appointments/beneficial/${userId}`}>
-            <Button variant='outlined'>
-              Rendez-vous
-            </Button>
-          </Link>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Link to={`/dashboard/appointments/beneficial/${userId}`}>
+              <Button size="small" variant='outlined'>
+                Appointment
+              </Button>
+            </Link>
+            
+            {/* beneficial reported or report her */}
+            {details.isReported ? (
+              <Typography sx={{ color: 'red'}}>Reported</Typography>
+            ) : (
+
+            currentUser.role === 'umujyanama wubuzima' && (
+              <Button 
+                size="small" 
+                color="error" 
+                variant='contained'
+                onClick={handleOpen}
+              >
+                Report
+              </Button>
+            )
+            )}
+          </Box>
           </Grid>        
       </Paper>
     </Grid>
@@ -279,15 +312,19 @@ export default function UserDetails() {
                 p: 2
               }}
             >
-              <Button
-                  // type="submit"
-                  size="small"
-                  variant="outlined"
-                  // sx={{ mt: 2, mb: 2, mr:4 }}
-                  onClick={()=> setShowDonateForm(true)}
-                >
-                  + Donate Now
-              </Button>
+              {/* hinder donate to reported beneficial */}
+              { !details.isReported && (
+                    <Button
+                    // type="submit"
+                    size="small"
+                    variant="outlined"
+                    // sx={{ mt: 2, mb: 2, mr:4 }}
+                    onClick={()=> setShowDonateForm(true)}
+                    >
+                      + Donate Now
+                    </Button>
+              )}
+              
             </Box>
           )}
         </Paper>

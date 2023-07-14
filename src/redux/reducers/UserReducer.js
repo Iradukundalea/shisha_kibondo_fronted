@@ -32,7 +32,12 @@ const userReducer = (state= userState, action)=>{
         loading: false,
         details: {...state.details, ...state.details.guardians.push(action.payload)},
       }
-      
+    
+    case actionTypes.REPORT_BENEFICIAL_USE_ABUSE_SUCCESS:
+      return {
+        ...state,
+        details: { ...state.details, isReported: action.payload.isReported} 
+      }
     
     default:
       return state

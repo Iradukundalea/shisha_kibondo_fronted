@@ -13,6 +13,8 @@ import {
   getBeneficials, 
   getBeneficialsInMyRegion 
 } from '../../redux/actions/BeneficialsActions';
+import HBar from '../../charts/HBar.jsx'
+import CountUp from 'react-countup';
 
 // import useSocket from '../../hooks/useSocket'
 
@@ -73,7 +75,8 @@ export default function Dashboard() {
             <Typography
               sx={{ fontWeight: 'bold', fontSize: 25, px: 2, py: 1 }}
             >
-              {product.totalQuantity}
+              {/* {product.totalQuantity} */}
+              <CountUp delay={0.5} end={product.totalQuantity} duration={0.5} />
             </Typography>
             <Typography
               sx={{ backgroundColor: 'rgba(0,0,0,.1)', textAlign: 'center' }}
@@ -104,7 +107,8 @@ export default function Dashboard() {
         <Typography
           sx={{ fontWeight: 'bold', fontSize: 25, px: 2, py: 1 }}
         >
-          {beneficials.length}
+          {/* {beneficials.length} */}
+          <CountUp delay={0.5} end={beneficials.length} duration={0.5} />
         </Typography>
         <Typography
           sx={{ backgroundColor: 'rgba(0,0,0,.1)', textAlign: 'center' }}
@@ -126,9 +130,10 @@ export default function Dashboard() {
           // height: 240,
         }}
       >
-        <pre>
+        <HBar />
+        {/* <pre>
           {JSON.stringify(user?.user, null, 2)}
-        </pre>
+        </pre> */}
       </Paper>
     </Grid>
     </Grid>

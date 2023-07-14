@@ -10,6 +10,7 @@ import { ToastContainer } from 'react-toastify';
 
 // axios.defaults.baseURL = "https://shisha-be.onrender.com/api";
 axios.defaults.baseURL = "http://localhost:5003/api";
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
