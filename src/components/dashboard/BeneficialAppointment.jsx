@@ -31,14 +31,13 @@ export default function BeneficialAppointment() {
 
   const [showCalendar, setshowCalendar] = React.useState(false)
   const [currentUser, setCurrentUser] = React.useState('')
-  const [editableRowIndex, setEditableRowIndex] = React.useState(-1);
   const [editableRows, setEditableRows] = React.useState([]);
 
-  const { list_appointments } = useSelector(
+  const { list_appointments, isChanged } = useSelector(
     ({
-      appointments: { list_appointments },
+      appointments: { list_appointments, isChanged },
     }) => ({
-        list_appointments,
+        list_appointments, isChanged
     })
   );
 
@@ -63,17 +62,19 @@ export default function BeneficialAppointment() {
   };
 
   const saveRow = async (appointment, index) => {
-    console.log('saving111....')
     await dispatch(changeAppointmentStatus(appointment.id, editableRows[index].status))
-    console.log('saving222....')
-
-    // Reset the editableRows state if needed
-    // setEditableRows([]);
   };
 
   const cancelEdit = () => {
     setEditableRows([]);
   };
+
+  React.useEffect(() => {
+    // Reset the editableRows
+    if (isChanged) {
+      setEditableRows([]);
+    }
+  }, [isChanged]);
 
   return (
     <>

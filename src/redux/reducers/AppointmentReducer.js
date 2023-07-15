@@ -39,6 +39,7 @@ const appointmentReducer = (state= appointmentState, action)=>{
           return {
             ...state,
             loading: false,
+            isChanged: true,
             list_appointments: state.list_appointments.map((appointment)=>{
               if(appointment.id === action.payload.id){
                 return { ...appointment, status: action.payload.status}
