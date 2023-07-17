@@ -29,6 +29,7 @@ import AdminRoute from './utils/AdminRoute'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'react-calendar/dist/Calendar.css';
+import Landing from './components/landingpage/Home'
 
 function App() {
   const dispatch = useDispatch();
@@ -42,7 +43,8 @@ function App() {
       <ToastContainer />
       <div>
           <Routes>
-            <Route path="/" element={<HomeLayout />} />
+            <Route path="/landing" element={<Landing />} />
+            <Route path="/" element={<Landing />} />
             <Route path="/login" element={<SignIn />} />
 
             <Route path="/dashboard" element={
