@@ -15,7 +15,6 @@ import Advisor from './components/dashboard/Advisors'
 import Nurses from './components/dashboard/Nurses'
 import ProductCategoryDetails from './components/dashboard/ProductCategoryDetails'
 import ForgotPassword from './components/auth/ForgotPassword'
-import HomeLayout from './components/landingpage/HomeLayout'
 import ResetForm from './components/auth/ResetForm'
 import Appointment from './components/dashboard/Appointment'
 import BeneficialAppointment from './components/dashboard/BeneficialAppointment'
@@ -43,10 +42,8 @@ function App() {
       <ToastContainer />
       <div>
           <Routes>
-            <Route path="/landing" element={<Landing />} />
             <Route path="/" element={<Landing />} />
             <Route path="/login" element={<SignIn />} />
-
             <Route path="/dashboard" element={
                <ProtectedRoute>
                  <DashboardLayout />
@@ -68,7 +65,7 @@ function App() {
               <Route path="*" element={<NotFound />} />
             </Route>
             <Route path="/auth/forgot-password" element={<ForgotPassword />} />
-            <Route exact path="/api/reset-password/:token" element={<ResetForm />} />
+            <Route exact path="/api/reset-password" element={<ResetForm />} />
           </Routes>
       </div>
     </>

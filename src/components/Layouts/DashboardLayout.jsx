@@ -145,9 +145,9 @@ export default function DashboardLayout() {
           <Divider />
           <List component="nav">
             {mainListItems}
-            <Divider sx={{ my: 1 }} />
-            {secondaryListItems}
-            <Divider sx={{ mt: 1, }} />
+            {/* <Divider sx={{ my: 1 }} />
+            {secondaryListItems} */}
+            <Divider sx={{ mb: 2, }} />
             {thirdListItems}
           </List>
         </Drawer>

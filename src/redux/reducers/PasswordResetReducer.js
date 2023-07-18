@@ -17,6 +17,12 @@ const passwordReducer = (state= passwordResetState, action)=>{
       error: action.payload, 
       loading: false 
     }
+
+    case actionTypes.PASSWORD_RESET_EMAIL_SENT:
+      return { 
+        ...state, 
+        loading: false 
+      }
     
     default:
       return state
