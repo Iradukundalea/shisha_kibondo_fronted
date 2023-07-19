@@ -17,6 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { LoginAuthAction } from '../../redux/actions/AuthAction'
 
+// import useSocket from '../../hooks/useSocket'
 
 const defaultTheme = createTheme();
 
@@ -40,6 +41,8 @@ export default function SignIn() {
     dispatch(LoginAuthAction({email, password}, navigate))
   };
 
+  //
+  // const { socket } = useSocket();
 
   return (
     <ThemeProvider theme={defaultTheme}>

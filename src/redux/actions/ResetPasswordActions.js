@@ -7,7 +7,12 @@ const requestPasswordReset = (email)=>{
         try{
             dispatch({type: actionTypes.PASSWORD_RESET_REQUEST})
             const { data } = await axios.post('/forgot-password', { email })
-            console.log('Reset password', data?.message)
+            console.log('Reset password', data)
+            if(data.resetToken){
+                successToast(`${data.message}, so check your Email!`)
+                dispatch({ type: actionTypes.PASSWORD_RESET_EMAIL_SENT})
+            }
+
         } catch(error){
             dispatch({
                 type: actionTypes.PASSWORD_RESET_ERROR, 
@@ -24,6 +29,27 @@ const requestPasswordReset = (email)=>{
     }
 }
 
+const resetPassword =({token, password, confirmPassword}, navigate) => {
+    return async (dispatch) => {
+        try {
+            const { data } = await axios.post(`/reset-password/${token}`, { 
+                newPassword: password,
+                confirmPassword: confirmPassword
+             })
+    
+             if(data.success){
+                successToast(data.message)
+                navigate('/login', )
+             }else{
+                errorToast(data.message)
+             }
+        } catch(error){
+            errorToast(error?.message)
+        }
+    }
+}
+
 export {
     requestPasswordReset,
+    resetPassword
 }

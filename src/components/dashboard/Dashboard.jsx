@@ -16,7 +16,7 @@ import {
 import HBar from '../../charts/HBar.jsx'
 import CountUp from 'react-countup';
 
-// import useSocket from '../../hooks/useSocket'
+import useSocket from '../../hooks/useSocket'
 
 
 function preventDefault(event) {
@@ -52,7 +52,7 @@ export default function Dashboard() {
   }, [currentUser?.role])
 
   //
-  // const { socket } = useSocket();
+  const { socket } = useSocket();
 
   return (
     <>

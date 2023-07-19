@@ -59,8 +59,9 @@ const MainListItems = () => {
         <ListItemText primary="Beneficials" />
       </ListItemButton>
     </Link>
-
-    <Link to='/dashboard/stocks'>
+    
+    { user?.user.role !== 'umujyanama wubuzima' && (
+      <Link to='/dashboard/stocks'>
       <ListItemButton>
         <ListItemIcon>
           <ShoppingCartIcon />
@@ -68,6 +69,8 @@ const MainListItems = () => {
         <ListItemText primary="Stocks" />
       </ListItemButton>
     </Link>
+    )}
+    
     <Link to='/dashboard/appointments'>
       <ListItemButton>
         <ListItemIcon>

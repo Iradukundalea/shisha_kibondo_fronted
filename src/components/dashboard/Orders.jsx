@@ -98,7 +98,7 @@ export default function Orders() {
           </>
         ))}
         
-        <Grid item xs={12} md={6} lg={6}>
+        {/* <Grid item xs={12} md={6} lg={6}>
               <Paper
                 sx={{
                   display: 'flex',
@@ -119,13 +119,14 @@ export default function Orders() {
                 <Typography
                   sx={{ backgroundColor: 'rgba(0,0,0,.1)', textAlign: 'center' }}
                 >
-                  <Link to={`/dashboard/stocks/`}>
+                  <Link to={`/dashboard/beneficials`}>
                     More info
                     <TrendingFlatSharpIcon />
                   </Link>
                 </Typography>
               </Paper>
-            </Grid>
+        </Grid> */}
+      
       </Grid>
 
       {/* <Paper>
