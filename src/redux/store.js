@@ -12,6 +12,7 @@ import notificationReducer from "./reducers/NotificationReducer";
 import passwordResetReducer from "./reducers/PasswordResetReducer"
 import stockInReducer from "./reducers/StockInReducer";
 import AppointmentReducer from './reducers/AppointmentReducer'
+import statisticsReducer from './reducers/statisticsReducer'
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -28,6 +29,7 @@ const rootReducer = combineReducers({
   passwordReset: passwordResetReducer,
   stock: stockInReducer,
   appointments: AppointmentReducer,
+  statistics: statisticsReducer,
 
 });
 

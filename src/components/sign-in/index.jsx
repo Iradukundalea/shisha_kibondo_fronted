@@ -24,6 +24,8 @@ const defaultTheme = createTheme();
 export default function SignIn() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const [password, setPassword] = React.useState('')
+  const [showPassword, setShowPassword] = React.useState(false)
 
   const state = useSelector((state)=> state.authState);
 
@@ -40,6 +42,10 @@ export default function SignIn() {
 
     dispatch(LoginAuthAction({email, password}, navigate))
   };
+
+  const toogleShowPassword =()=>{
+    setShowPassword(!showPassword)
+  }
 
   //
   // const { socket } = useSocket();
@@ -79,14 +85,24 @@ export default function SignIn() {
               fullWidth
               name="password"
               label="Password"
-              type="password"
+              type={!showPassword && "password"}
               id="password"
               autoComplete="current-password"
+              value={password}
+              onChange={(e)=> setPassword(e.target.value)}
+
             />
-            {/* <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            /> */}
+            <Typography
+              sx={{
+                cursor: 'pointer',
+                position: 'relative',
+                top: '-45px',
+                left: '345px'
+              }}
+              onClick={toogleShowPassword}
+            > {!showPassword ? 'Show': 'Hide'}
+            </Typography>
+           
             {state.loading ? (
               <Button
               fullWidth

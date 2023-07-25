@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Copyright from '../copyright';
 import { useSelector, useDispatch } from 'react-redux'
@@ -15,7 +14,8 @@ import {
 } from '../../redux/actions/BeneficialsActions';
 import HBar from '../../charts/HBar.jsx'
 import CountUp from 'react-countup';
-
+import PieChart from '../../charts/Pie.jsx'
+import { getStatisticsAction } from '../../redux/actions/StatisticsActions'
 import useSocket from '../../hooks/useSocket'
 
 
@@ -27,15 +27,17 @@ export default function Dashboard() {
   const dispatch = useDispatch()
   const [currentUser, setCurrentUser] = React.useState('')
 
-  const { list: productList, user, beneficials } = useSelector(
+  const { list: productList, user, beneficials, stats } = useSelector(
     ({
       authState: { user },
       productState: { list },
-      beneficialState: { beneficials }
+      beneficialState: { beneficials },
+      statistics: { stats }
     }) => ({
       user,
       list,
-      beneficials
+      beneficials,
+      stats
     })
   );
 
@@ -49,6 +51,9 @@ export default function Dashboard() {
     }
 
     dispatch(listProductsAction())
+
+    // STATISTICS
+    dispatch(getStatisticsAction())
   }, [currentUser?.role])
 
   //
@@ -130,15 +135,11 @@ export default function Dashboard() {
           // height: 240,
         }}
       >
-        <HBar />
-        {/* <pre>
-          {JSON.stringify(user?.user, null, 2)}
-        </pre> */}
+        <PieChart datasets={stats} />
       </Paper>
     </Grid>
     </Grid>
     <Copyright sx={{ pt: 4 }} />
     </>
-    
   );
 }
