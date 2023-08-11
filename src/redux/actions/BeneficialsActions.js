@@ -65,10 +65,14 @@ const addNewBeneficial = (beneficialData, hideForm) => {
     }
 }
 
-const reportBeneficiaryAction = (beneficialId, closeModal) =>{
+const reportBeneficiaryAction = (beneficialId, height, weight, MUAC, closeModal) =>{
     return async (dispatch) =>{
         try{
-            const { data } = await axios.put(`/beneficials/${beneficialId}/report-use-abuse`)
+            const { data } = await axios.put(`/beneficials/${beneficialId}/report-use-abuse`, {
+                height,
+                weight,
+                MUAC
+            })
             if(data.response.isReported){
                 dispatch({ type: actionTypes.REPORT_BENEFICIAL_USE_ABUSE_SUCCESS, payload: data.response})
                 
@@ -82,6 +86,7 @@ const reportBeneficiaryAction = (beneficialId, closeModal) =>{
         }
     }
 }
+
 export {
     getBeneficials,
     addNewBeneficial,

@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { reportBeneficiaryAction } from '../../redux/actions/BeneficialsActions'
 import { useDispatch } from 'react-redux'
+import { TextField } from '@mui/material';
 
 const style = {
   position: 'absolute',
@@ -21,10 +22,18 @@ const style = {
 
 export default function BasicModal({ open, handleOpen, handleClose, user}) {
     const dispatch = useDispatch()
+    const [height, setHeight] = React.useState('')
+    const [weight, setWeight] = React.useState('')
+    const [MUAC, setMUAC] = React.useState('')
 
     const handleReporting = ()=>{
-        console.log('SUBMITTING REPORTING', user)
-        dispatch(reportBeneficiaryAction(user.id, handleClose))
+        console.log('SUBMITTING REPORTING', {
+          height,
+          weight,
+          MUAC
+        })
+
+        dispatch(reportBeneficiaryAction(user.id, height, weight, MUAC, handleClose))
 
     }
     return (
@@ -56,6 +65,48 @@ export default function BasicModal({ open, handleOpen, handleClose, user}) {
                 { user.firstName } { user.lastName }
             </Box>
           </Typography>
+          
+          <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="height"
+              name="height"
+              value={height}
+              onChange={(e)=> setHeight(e.target.value)}
+              autoComplete="height"
+              placeholder="Height"
+              autoFocus
+          />
+
+          <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="weight"
+              name="weight"
+              value={weight}
+              onChange={(e)=> setWeight(e.target.value)}
+              autoComplete="weight"
+              placeholder="Weight"
+              autoFocus
+          />
+
+        {user.status !== 'pregnant' && 
+          <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="muac"
+                name="muac"
+                value={MUAC}
+                onChange={(e)=> setMUAC(e.target.value)}
+                autoComplete="muac"
+                placeholder="MUAC"
+                autoFocus
+          />
+        }
+          
 
           <Button 
             onClick={handleReporting}
