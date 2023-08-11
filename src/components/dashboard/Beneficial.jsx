@@ -18,10 +18,6 @@ import Loading from './Loading'
 import {getCurrentUser} from '../../utils/getCurrentUser'
 import { Link } from 'react-router-dom'
 
-function preventDefault(event) {
-  event.preventDefault();
-}
-
 export default function Beneficial() {
   const [showAddForm, setShowAddForm] = useState(false)
   const { beneficials, loading: loadBeneficials, message: beneficalMessage } = useSelector((state)=> state.beneficialState)
@@ -103,6 +99,9 @@ export default function Beneficial() {
                     <TableCell sx={{ fontWeight: 'bold'}}>Phone</TableCell>
                     <TableCell sx={{ fontWeight: 'bold'}}>Address</TableCell>
                     <TableCell sx={{ fontWeight: 'bold'}}>Health Center</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold'}}>Height</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold'}}>Weight</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold'}}>MUAC</TableCell>
                     <TableCell sx={{ fontWeight: 'bold'}}>JoinedAt</TableCell>
                   </TableRow>
                 </TableHead>
@@ -123,6 +122,9 @@ export default function Beneficial() {
                       <TableCell>{row?.telephone}</TableCell>
                       <TableCell>{row?.province}, {row?.district}, {row?.sector}, {row?.cell}</TableCell>
                       <TableCell>{row?.healthCenter}</TableCell>
+                      <TableCell>{row?.height ? `${row?.height} m`  : '-'}</TableCell>
+                      <TableCell>{row?.weight ? `${row?.weight} kg`  : '-'}</TableCell>
+                      <TableCell>{row?.MUAC ? `${row?.MUAC}`  : '-'}</TableCell>
                       <TableCell>{new Date(row?.createdAt).toLocaleDateString()}</TableCell>
                     </TableRow>
                     
