@@ -38,11 +38,77 @@ import { Link, useParams } from 'react-router-dom'
 import { TextField } from '@mui/material';
 import { addProductQuantityInStock } from '../../redux/actions/StockActions'
 import {getCurrentUser} from '../../utils/getCurrentUser'
-
+import { CSVLink, CSVDownload } from "react-csv";
+import { PDFDownloadLink, Page, Text, Document } from '@react-pdf/renderer';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable'
 
 function preventDefault(event) {
   event.preventDefault();
 }
+
+const getCSVData = (productCategory, transactions) => {
+  const csvData = [];
+
+  // Prepare the header row
+  csvData.push([
+    'PRODUCT NAME',
+    'BENEFICIAL',
+    'QUANTITY',
+    'DATE',
+  ]);
+
+  // Iterate through transactions and add data
+  transactions?.forEach((transaction) => {
+    const productName = productCategory?.name;
+
+    let beneficialInfo = '-';
+    if (transaction?.beneficial) {
+      beneficialInfo = `${transaction.beneficial.firstName} ${transaction.beneficial.lastName}`;
+    }
+
+    const quantity = transaction.quantity;
+
+    let date = '-';
+    if (transaction?.createdAt) {
+       date = new Date(transaction.createdAt).toLocaleDateString();
+    }
+
+    if(transaction?.beneficial){
+        csvData.push([productName, beneficialInfo, quantity, date]);
+    }
+  });
+
+  return csvData;
+};
+
+const generatePDF = (productCategory, data) => {
+  const doc = new jsPDF();
+
+  doc.text('Report for Donation', 10, 10);
+
+
+  const header = ['PRODUCT NAME', 'BENEFICIAL', 'QUANTITY', 'DATE'];
+  const filteredData = data.filter(transaction => transaction.beneficial);
+  const rows = filteredData.map((transaction) =>[
+      productCategory?.name,
+      transaction?.beneficial
+        ? `${transaction.beneficial.firstName} ${transaction.beneficial.lastName}`
+        : '-',
+      transaction.quantity,
+      transaction?.createdAt
+        ? new Date(transaction?.createdAt).toLocaleDateString()
+        : '-',
+    ]);
+
+  doc.autoTable({
+    head: [header],
+    body: rows,
+  });
+
+  doc.save('product_transactions.pdf');
+};
+
 
 export default function Advisor() {
   const { productCategoryId } = useParams()
@@ -98,16 +164,34 @@ export default function Advisor() {
   return (
     <>
     { currentUser.role === 'Nurse' && (
-      <Button
-        type="submit"
-        variant="outlined"
-        sx={{ mb: 2 }}
-        onClick={() => isShowAddProductQuantityForm(true)}
+      <>
+        <Button
+          type="submit"
+          variant="outlined"
+          sx={{ mb: 2 }}
+          onClick={() => isShowAddProductQuantityForm(true)}
+            >
+              + Add {productCategory?.name}
+        </Button>
+
+      
+          <CSVLink
+            data={getCSVData(productCategory, productCategory?.transactions)}
+            filename={'report_of_donated_beneficial.csv'}
+            style={{ textDecoration: 'underline', marginLeft: '20px' }}
           >
-            + Add {productCategory?.name}
-      </Button>
+            Download CSV
+          </CSVLink>
+
+          <button 
+            onClick={() => generatePDF(productCategory, productCategory?.transactions)}
+            style={{ textDecoration: 'underline', marginLeft: '20px' }}
+          >
+            Download PDF
+          </button>
+      </>
     )}
-    
+
     <Grid container spacing={3}>
     
       {/* Product category Table transactions */}
@@ -128,6 +212,7 @@ export default function Advisor() {
                   <TableCell sx={{ fontWeight: 'bold'}}>TYPE</TableCell>
                   <TableCell sx={{ fontWeight: 'bold'}}>QUANTITY</TableCell>
                   <TableCell sx={{ fontWeight: 'bold'}}>EXPIRATION DATE</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold'}}>CREATED AT</TableCell>
                   </TableRow>
               </TableHead>
               <TableBody>
@@ -158,6 +243,12 @@ export default function Advisor() {
                           <TableCell>
                               { transaction?.expirationDate? 
                                   new Date(transaction?.expirationDate).toLocaleDateString() 
+                                  : '-'
+                              }
+                          </TableCell>
+                          <TableCell>
+                              { transaction?.createdAt? 
+                                  new Date(transaction?.createdAt).toLocaleDateString() 
                                   : '-'
                               }
                           </TableCell>

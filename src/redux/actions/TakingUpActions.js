@@ -13,7 +13,7 @@ const getBeneficialTakingUpTransactions = (userId)=>{
     }
 }
 
-const donateToBeneficial = (productCategoryId, beneficialId, quantity, setShowDonateForm)=>{
+const donateToBeneficial = (productCategoryId, beneficialId, quantity, setShowDonateForm, handleFormClear)=>{
     return async (dispatch) =>{
         try {
             dispatch({type: actionTypes.DONATE_REQUEST})
@@ -21,7 +21,8 @@ const donateToBeneficial = (productCategoryId, beneficialId, quantity, setShowDo
 
             if(data){
                 dispatch({type: actionTypes.DONATE_SUCCESS, payload: data})
-                setShowDonateForm(false)
+                // setShowDonateForm(false)
+                handleFormClear()
 
                 // show a toast
                 successToast('Product donated successfully')

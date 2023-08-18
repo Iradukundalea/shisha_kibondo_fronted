@@ -76,11 +76,18 @@ export default function UserDetails() {
   const handleShowDonateForm = () =>{
     setShowDonateForm(false)
   }
-  const handleDonateSubmit = (event) =>{
-    preventDefault(event)
-
-    dispatch(donateToBeneficial(productCatId, userId, quantity, setShowDonateForm))
+  const handleFormClear = () =>{
+    setProductCatId('')
+    setQuantity('')
   }
+  const handleDonateSubmit = (event) =>{
+    // preventDefault(event)
+    event.preventDefault()
+
+    dispatch(donateToBeneficial(productCatId, userId, quantity, setShowDonateForm, handleFormClear))
+  }
+
+  
 
   return (
     <React.Fragment>
@@ -389,7 +396,7 @@ export default function UserDetails() {
               size="medium"
               variant="contained"
               sx={{ mt: 2, mb: 2 }}
-              onClick={handleDonateSubmit}
+              onClick={(event) => handleDonateSubmit(event)}
               disabled={!quantity || !productCatId || parseInt(quantity) === 0  } 
             >
               Submit
