@@ -42,6 +42,7 @@ import { CSVLink, CSVDownload } from "react-csv";
 import { PDFDownloadLink, Page, Text, Document } from '@react-pdf/renderer';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable'
+import FAB from '../../assets/logo.jfif'
 
 function preventDefault(event) {
   event.preventDefault();
@@ -82,18 +83,88 @@ const getCSVData = (productCategory, transactions) => {
   return csvData;
 };
 
-const generatePDF = (productCategory, data) => {
+const generatePDF = (data, user) => {
   const doc = new jsPDF();
 
-  doc.text('Report for Donation', 10, 10);
+  const x_position = 20;     // X-coordinate where the logo starts
+  const y_position = 10;     // Y-coordinate where the logo starts
+  const logoWidth = 50;      // Width of the logo
+  const logoHeight = 40;     // Height of the logo
+
+  // Get the width of the PDF page
+  const pageWidth = doc.internal.pageSize.getWidth();
+  
+
+  // Adding LOGO
+  const imgData = FAB; 
+  
+  doc.addImage(imgData, 'jpg', x_position, y_position, logoWidth, logoHeight);
+
+  // Add company address
+  const companyAddressLines = [
+    'UMUGI WA KIGARI',
+    'AKARERE KA GASABO',
+    'IKIGO NDERABUZIMA CYA REMERA',
+    'TEL: 0782264752',
+    'Email: csremera@gmail.com',
+  ];
+  
+  const lineHeight = 7; // Adjust the line height as needed
+  
+  doc.setFontSize(10);
+  companyAddressLines.forEach((line, index) => {
+    doc.text(line, x_position, y_position + 10 + logoHeight + (index * lineHeight));
+  });
 
 
-  const header = ['PRODUCT NAME', 'BENEFICIAL', 'QUANTITY', 'DATE'];
+  // Add Report title
+  const reportTitle = `Shishakibondo Donation Report`
+  const titleFontSize = 16;
+  // Calculate title size
+  const titleWidth = doc.getStringUnitWidth(reportTitle) * titleFontSize / doc.internal.scaleFactor;
+
+  // Calculate the x-coordinate to center the title
+  const titleXPosition = (pageWidth - titleWidth) / 2;
+  const titleYPosition = y_position + logoHeight + 40;
+
+  // Underline the report title
+  const underlineYPosition = titleYPosition + 2;
+  
+  doc.setFontSize(titleFontSize);
+  doc.text(reportTitle, titleXPosition, titleYPosition)
+
+  // Draw a line under the title
+  doc.setLineWidth(0.5); // Adjust the line thickness if needed
+  doc.line(titleXPosition, underlineYPosition, titleXPosition + titleWidth, underlineYPosition);
+
+
+
+  // Calculate the Y-coordinate for the table starting position
+  const tableYPosition = y_position + logoHeight + 45; // Adjust spacing as needed
+
+
+  // Add footer with printed date
+  var printedDate = new Date().toLocaleString();
+  var footerText = `Printed On: ` + printedDate;
+
+  var pageCount = doc.internal.getNumberOfPages();
+  for (var i = 1; i <= pageCount; i++) {
+      doc.setPage(i);
+      doc.setFontSize(8);
+      doc.text(100, doc.internal.pageSize.getHeight() - 10, footerText);
+  }
+
+  const header = ['BENEFICIAL', 'CELL', 'VILLAGE', 'QUANTITY RECEIVED', 'DONATION DATE'];
   const filteredData = data.filter(transaction => transaction.beneficial);
   const rows = filteredData.map((transaction) =>[
-      productCategory?.name,
       transaction?.beneficial
         ? `${transaction.beneficial.firstName} ${transaction.beneficial.lastName}`
+        : '-',
+      transaction?.beneficial
+        ? `${transaction.beneficial.cell}`
+        : '-',
+      transaction?.beneficial
+        ? `${transaction.beneficial.village}`
         : '-',
       transaction.quantity,
       transaction?.createdAt
@@ -104,9 +175,218 @@ const generatePDF = (productCategory, data) => {
   doc.autoTable({
     head: [header],
     body: rows,
+    startY: tableYPosition
   });
 
-  doc.save('product_transactions.pdf');
+  doc.save('shishakibondo_donation_report.pdf');
+};
+
+const generatePDFByCell = (data, cell) => {            
+  const doc = new jsPDF();
+
+  const x_position = 20;     // X-coordinate where the logo starts
+  const y_position = 10;     // Y-coordinate where the logo starts
+  const logoWidth = 50;      // Width of the logo
+  const logoHeight = 40;     // Height of the logo
+
+  // Get the width of the PDF page
+  const pageWidth = doc.internal.pageSize.getWidth();
+
+  // Adding LOGO
+  const imgData = FAB; 
+  
+  doc.addImage(imgData, 'jfif', x_position, y_position, logoWidth, logoHeight);
+
+  // Add company address
+  const companyAddressLines = [
+    'UMUGI WA KIGARI',
+    'AKARERE KA GASABO',
+    'IKIGO NDERABUZIMA CYA REMERA',
+    'TEL: 0782264752',
+    'Email: csremera@gmail.com',
+  ];
+  
+  const lineHeight = 7; // Adjust the line height as needed
+  
+  doc.setFontSize(10);
+  companyAddressLines.forEach((line, index) => {
+    doc.text(line, x_position, y_position + 10 + logoHeight + (index * lineHeight));
+  });
+
+
+  // Add Report title
+  const reportTitle = `Shishakibondo Donation Report`
+  const titleFontSize = 16;
+  // Calculate title size
+  const titleWidth = doc.getStringUnitWidth(reportTitle) * titleFontSize / doc.internal.scaleFactor;
+
+  // Calculate the x-coordinate to center the title
+  const titleXPosition = (pageWidth - titleWidth) / 2;
+  const titleYPosition = y_position + logoHeight + 40;
+
+  // Underline the report title
+  const underlineYPosition = titleYPosition + 12;
+  
+  doc.setFontSize(titleFontSize);
+  doc.text(reportTitle, titleXPosition, titleYPosition)
+
+  // Draw a line under the title
+  doc.setLineWidth(0.5); // Adjust the line thickness if needed
+  doc.line(titleXPosition, underlineYPosition, titleXPosition + titleWidth, underlineYPosition);
+
+  // Calculate the Y-coordinate for the table starting position
+  const tableYPosition = y_position + logoHeight + 45; // Adjust spacing as needed
+
+  // Add footer with printed date
+  var printedDate = new Date().toLocaleString();
+  var footerText = `Printed On: ` + printedDate;
+
+  var pageCount = doc.internal.getNumberOfPages();
+  for (var i = 1; i <= pageCount; i++) {
+      doc.setPage(i);
+      doc.setFontSize(8);
+      doc.text(100, doc.internal.pageSize.getHeight() - 10, footerText);
+  }
+
+  const header = ['BENEFICIAL', 'CELL', 'VILLAGE', 'QUANTITY RECEIVED', 'DONATION DATE'];
+  const filteredData = data.filter((transaction) => transaction.beneficial && transaction.beneficial.cell === cell);
+  if (filteredData.length === 0) {
+    // Add a row indicating no matching data
+    const noMatchRow = ['', '', '- No matching data -', '', ''];
+    doc.autoTable({
+      head: [header],
+      body: [noMatchRow],
+      startY: tableYPosition,
+      colSpan: { 0: 5 }, // Span across all columns
+      styles: { cellWidth: 'wrap' }, // Allow cell to wrap content
+    });
+  } else {
+    const rows = filteredData.map((transaction) =>[
+      transaction?.beneficial
+        ? `${transaction.beneficial.firstName} ${transaction.beneficial.lastName}`
+        : '-',
+      transaction?.beneficial
+        ? `${transaction.beneficial.cell}`
+        : '-',
+      transaction?.beneficial
+        ? `${transaction.beneficial.village}`
+        : '-',
+      transaction.quantity,
+      transaction?.createdAt
+        ? new Date(transaction?.createdAt).toLocaleDateString()
+        : '-',
+    ]);
+    doc.autoTable({
+      head: [header],
+      body: rows,
+      startY: tableYPosition
+    });
+}
+  doc.save('shishakibondo_donation_report.pdf');
+};
+
+const generatePDFByVillage = (data, village) => {
+  const doc = new jsPDF();
+
+  const x_position = 20;     // X-coordinate where the logo starts
+  const y_position = 10;     // Y-coordinate where the logo starts
+  const logoWidth = 50;      // Width of the logo
+  const logoHeight = 40;     // Height of the logo
+
+  // Get the width of the PDF page
+  const pageWidth = doc.internal.pageSize.getWidth();
+
+  // Adding LOGO
+  const imgData = FAB; 
+  
+  doc.addImage(imgData, 'jpg', x_position, y_position, logoWidth, logoHeight);
+
+  // Add company address
+  const companyAddressLines = [
+    'UMUGI WA KIGARI',
+    'AKARERE KA GASABO',
+    'IKIGO NDERABUZIMA CYA REMERA',
+    'TEL: 0782264752',
+    'Email: csremera@gmail.com',
+  ];
+  
+  const lineHeight = 7; // Adjust the line height as needed
+  
+  doc.setFontSize(10);
+  companyAddressLines.forEach((line, index) => {
+    doc.text(line, x_position, y_position + 10 + logoHeight + (index * lineHeight));
+  });
+
+
+  // Add Report title
+  const reportTitle = `Shishakibondo Donation Report`
+  const titleFontSize = 16;
+  // Calculate title size
+  const titleWidth = doc.getStringUnitWidth(reportTitle) * titleFontSize / doc.internal.scaleFactor;
+
+  // Calculate the x-coordinate to center the title
+  const titleXPosition = (pageWidth - titleWidth) / 2;
+  const titleYPosition = y_position + logoHeight + 40;
+
+  // Underline the report title
+  const underlineYPosition = titleYPosition + 2;
+  
+  doc.setFontSize(titleFontSize);
+  doc.text(reportTitle, titleXPosition, titleYPosition)
+
+  // Draw a line under the title
+  doc.setLineWidth(0.5); // Adjust the line thickness if needed
+  doc.line(titleXPosition, underlineYPosition, titleXPosition + titleWidth, underlineYPosition);
+
+  // Calculate the Y-coordinate for the table starting position
+  const tableYPosition = y_position + logoHeight + 45; // Adjust spacing as needed
+
+  // Add footer with printed date
+  var printedDate = new Date().toLocaleString();
+  var footerText = `Printed On: ` + printedDate;
+
+  var pageCount = doc.internal.getNumberOfPages();
+  for (var i = 1; i <= pageCount; i++) {
+      doc.setPage(i);
+      doc.setFontSize(8);
+      doc.text(100, doc.internal.pageSize.getHeight() - 10, footerText);
+  }
+
+  const header = ['BENEFICIAL', 'CELL', 'VILLAGE', 'QUANTITY RECEIVED', 'DONATION DATE'];
+  const filteredData = data.filter((transaction) => transaction.beneficial && transaction.beneficial.village === village);
+  if (filteredData.length === 0) {
+    // Add a row indicating no matching data
+    const noMatchRow = ['', '', '- No matching data -', '', ''];
+    doc.autoTable({
+      head: [header],
+      body: [noMatchRow],
+      startY: tableYPosition,
+      colSpan: { 0: 5 }, // Span across all columns
+      styles: { cellWidth: 'wrap' }, // Allow cell to wrap content
+    });
+  } else {
+    const rows = filteredData.map((transaction) =>[
+      transaction?.beneficial
+        ? `${transaction.beneficial.firstName} ${transaction.beneficial.lastName}`
+        : '-',
+      transaction?.beneficial
+        ? `${transaction.beneficial.cell}`
+        : '-',
+      transaction?.beneficial
+        ? `${transaction.beneficial.village}`
+        : '-',
+      transaction.quantity,
+      transaction?.createdAt
+        ? new Date(transaction?.createdAt).toLocaleDateString()
+        : '-',
+    ]);
+    doc.autoTable({
+      head: [header],
+      body: rows,
+      startY: tableYPosition
+    });
+}
+  doc.save('shishakibondo_donation_report.pdf');
 };
 
 
@@ -117,6 +397,10 @@ export default function Advisor() {
   const [quantity, setQuantity] = React.useState('')
   const [expirationDate, setExpirationDate] = React.useState('')
   const [currentUser, setCurrentUser] = React.useState('')
+  const [showCellInput, setShowCellInput] = React.useState(false)
+  const [showVillageInput, setShowVillageInput] = React.useState(false)
+  const [cell, setCell] = React.useState('')
+  const [village, setVillage] = React.useState('')
 
   const { productCategory, loading, isProductQuantityUpdated } = useSelector(
     ({
@@ -161,6 +445,30 @@ export default function Advisor() {
     dispatch(addProductQuantityInStock(data))
   }
 
+  const printCellPDFHandler = (e) =>{
+    e.preventDefault()
+    generatePDFByCell(productCategory?.transactions, cell)
+  }
+
+  const printVillagePDFHandler = (e) =>{
+    e.preventDefault()
+    generatePDFByVillage(productCategory?.transactions, village)
+  }
+
+  const handleShowCellInput =()=>{
+    // Hide village input
+    setShowVillageInput(false)
+
+    setShowCellInput(true)
+  }
+
+  const handleShowVillageInput =()=>{
+    // Hide cell input
+    setShowCellInput(false)
+
+    setShowVillageInput(true)
+  }
+
   return (
     <>
     { currentUser.role === 'Nurse' && (
@@ -184,11 +492,84 @@ export default function Advisor() {
           </CSVLink>
 
           <button 
-            onClick={() => generatePDF(productCategory, productCategory?.transactions)}
+            onClick={() => generatePDF(productCategory?.transactions, currentUser)}
             style={{ textDecoration: 'underline', marginLeft: '20px' }}
           >
-            Download PDF
+            Download Full PDF
           </button>
+
+          {/* cell printing */}
+
+          {showCellInput ? (
+            <Box component="form" onSubmit={printCellPDFHandler} >
+              <TextField
+                sx={{ mb: 2}}
+                id="cell" 
+                label="Cell" 
+                variant='standard'
+                name="cell"
+                type="text"
+                // fullWidth
+                focused
+                value={cell}
+                onChange={(event)=> setCell(event.target.value)}
+              />
+              <Button
+                type="submit"
+                // fullWidth
+                variant="text"
+                disabled={!cell.trim().length}
+                sx={{ mt: 2, mb: 0 }}
+              >
+                Download
+              </Button>
+
+            </Box>
+            
+          ): (
+            <button 
+              onClick={() => handleShowCellInput()}
+              style={{ textDecoration: 'underline', marginLeft: '20px' }}
+            >
+              Download PDF by Cell
+            </button>
+          )}
+          
+
+          {showVillageInput ? (
+            <Box component="form" onSubmit={printVillagePDFHandler} >
+              <TextField
+                sx={{ mb: 2}}
+                id="village" 
+                label="Village" 
+                variant='standard'
+                name="village"
+                type="text"
+                // fullWidth
+                focused
+                value={village}
+                onChange={(event)=> setVillage(event.target.value)}
+              />
+              <Button
+                type="submit"
+                // fullWidth
+                variant="text"
+                disabled={!village.trim().length}
+                sx={{ mt: 2, mb: 0 }}
+              >
+                Download
+              </Button>
+
+            </Box>
+            
+          ): (
+            <button 
+              onClick={() => handleShowVillageInput()}
+              style={{ textDecoration: 'underline', marginLeft: '20px', marginBottom: '10px' }}
+            >
+              Download PDF by Village
+            </button>
+          )}
       </>
     )}
 
@@ -209,10 +590,11 @@ export default function Advisor() {
                   <TableRow>
                   <TableCell sx={{ fontWeight: 'bold'}}>PRODUCT NAME</TableCell>
                   <TableCell sx={{ fontWeight: 'bold'}}>BENEFICIAL</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold'}}>CELL</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold'}}>VILLAGE</TableCell>
                   <TableCell sx={{ fontWeight: 'bold'}}>TYPE</TableCell>
                   <TableCell sx={{ fontWeight: 'bold'}}>QUANTITY</TableCell>
                   <TableCell sx={{ fontWeight: 'bold'}}>EXPIRATION DATE</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold'}}>CREATED AT</TableCell>
                   </TableRow>
               </TableHead>
               <TableBody>
@@ -235,6 +617,16 @@ export default function Advisor() {
                               }
                           </TableCell>
                           <TableCell>
+                              { transaction?.beneficial?.cell? 
+                                   transaction?.beneficial?.cell: '-'
+                              }
+                          </TableCell>
+                          <TableCell>
+                              { transaction?.beneficial?.village? 
+                                  transaction?.beneficial?.village : '-'
+                              }
+                          </TableCell>
+                          <TableCell>
                               { transaction?.beneficial?.firstName? 
                                   'STOCKOUT' : 'STOCKIN'
                               }
@@ -243,12 +635,6 @@ export default function Advisor() {
                           <TableCell>
                               { transaction?.expirationDate? 
                                   new Date(transaction?.expirationDate).toLocaleDateString() 
-                                  : '-'
-                              }
-                          </TableCell>
-                          <TableCell>
-                              { transaction?.createdAt? 
-                                  new Date(transaction?.createdAt).toLocaleDateString() 
                                   : '-'
                               }
                           </TableCell>
